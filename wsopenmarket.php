@@ -43,7 +43,6 @@ class Wsopenmarket extends Module
 
   $this->confirmUninstall = $this->l('Are you sure you want to unistall this module?');
 
-//   $this->ps_versions_compliancy = array('min' => '1.7.x.x');
   $this->ps_versions_compliancy['min'] = '1.7.0.0';
 
 
@@ -388,7 +387,26 @@ class Wsopenmarket extends Module
  public function hookActionPaymentConfirmation($params)
  {
 
-  // codigo aqui
+  self::logtxt("se ejecuto ActionPaymentConfirmation Successful!!");
+
+  $id_order = $params['id_order'];
+  $order = $params['order'];
+  $customer = $params['customer'];
+
+  $result = array(
+   'id_order' => $id_order,
+   'order' => $order,
+   'customer' => $customer
+  );
+
+  return var_dump($result);
+  // $oOrder = new Order($aParams['id_order']);
+
+    // if ($aParams['newOrderStatus']->id == Configuration::get('PS_OS_PAYMENT')) {
+    //     $oOrder->setCurrentState(Configuration::get('XXXXXX_STATUS_WAITING'));
+    //     $oOrder->save();
+    // }
+
 
  }
 }
