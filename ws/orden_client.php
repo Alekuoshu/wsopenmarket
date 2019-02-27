@@ -95,12 +95,15 @@ class Orden
    exit();
   }
 
-  // add input params
-  $dataInputOrden = array(
-   "Recibo_Picking.DESPACHOS" => array(
-    'Usuario' => "WSABBOTT",
+// add input params
+
+$dataInputCredentials = array(
+    'Usuario' =>  "WSABBOTT",
     'Clave' => "WS.2019.ABBOTT",
-    "SDTRecOutboundDelivery.SDTRecOutboundDeliveryItem" => array(
+);
+
+  $dataInputOrden = array(
+    "SDTRecOutboundDelivery" => array(
         'Nit' => "860002134-9", //siempre este
         'Documento' => "DOC1",
         'OrdenCompra' => "OC1",
@@ -115,30 +118,36 @@ class Orden
         'FechaMinimaEntrega' => "26/02/2019",
         'FechaMaximaEntrega' => "26/02/2019",
         'Observaciones' => "Testing WS1",
-        'ValorAsegurado' => "80000",
+        'ValorAsegurado' => 8000,
         'FechaReciboIntegracion' => "26/02/2019", //opcional
         'EstadoProceso' => "N", //siempre N
         'MensajeRecibido' => "", //vacio
         'MensajeRespueta' => "", //vacio
     ),
-    "SDT_Productos.SDT_ProductosItem" => array(
+  );
+
+  $dataInputOrdenItem = array(
+    "SDT_Productos" => array(
         'Nit' => "860002134-9", //siempre este
         'Documento' => "DOC1",
         'OrdenCompra' => "OC1",
         'Consecutivo'   => "1",
         'CodigoProducto' => "Prod01",
         'Lote' => "", //vacio
-        'UnidadesSolucitadas' => "10",
+        'UnidadesSolucitadas' => 10,
         'Bodega' => "", //vacio
         'EstadoRegistro' => "N", //siempre N
     ),
-   ),
   );
+
+
 
   // get data
   try {
-   $result = $this->_soapClient->call('DESPACHOS', $dataInputOrden);
+//    $result = $this->_soapClient->call('DESPACHOS', $dataInputCredentials);
+   $result = $this->_soapClient->call('DESPACHOS', $dataInputCredentials, $dataInputOrden, $dataInputOrdenItem);
    $this->orden = utf8_encode($result['Resultado']);
+   var_dump($dataInputOrdenItem);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
   }
