@@ -95,21 +95,50 @@ class Orden
    exit();
   }
 
-  // add params: only data for testing
-  $dataInputPerson = array(
-   "datos_persona_entrada" => array(
-    'nombre' => "Mauricio Villegas",
-    'email' => "mau.alek@gmail.com",
-    'telefono' => "7987987987",
-    'ano_nac' => 2014,
+  // add input params
+  $dataInputOrden = array(
+   "Recibo_Picking.DESPACHOS" => array(
+    'Usuario' => "WSABBOTT",
+    'Clave' => "WS.2019.ABBOTT",
+    "SDTRecOutboundDelivery.SDTRecOutboundDeliveryItem" => array(
+        'Nit' => "860002134-9", //siempre este
+        'Documento' => "DOC1",
+        'OrdenCompra' => "OC1",
+        'NroPedido'   => "1",
+        'FechaPedido' => "26/02/2019",
+        'CodigoDestinatario' => "01125",
+        'NombreDestinatario' => "Alejandro Villegas",
+        'DireccionDestinatario' => "Av. 69a, Cra. 119a, #118b-11. Engativa La Faena",
+        'CiudadDestinatario' => "11001",
+        'TelefonoDestinatario' => "3022471141",
+        'CelularDestinatario' => "3022471141",
+        'FechaMinimaEntrega' => "26/02/2019",
+        'FechaMaximaEntrega' => "26/02/2019",
+        'Observaciones' => "Testing WS1",
+        'ValorAsegurado' => "80000",
+        'FechaReciboIntegracion' => "26/02/2019", //opcional
+        'EstadoProceso' => "N", //siempre N
+        'MensajeRecibido' => "", //vacio
+        'MensajeRespueta' => "", //vacio
+    ),
+    "SDT_Productos.SDT_ProductosItem" => array(
+        'Nit' => "860002134-9", //siempre este
+        'Documento' => "DOC1",
+        'OrdenCompra' => "OC1",
+        'Consecutivo'   => "1",
+        'CodigoProducto' => "Prod01",
+        'Lote' => "", //vacio
+        'UnidadesSolucitadas' => "10",
+        'Bodega' => "", //vacio
+        'EstadoRegistro' => "N", //siempre N
+    ),
    ),
   );
 
   // get data
-  // TODO: esperando endpoint para el consumo real y poder enviar el pedido
   try {
-   $result = $this->_soapClient->call('calculo_edad', $dataInputPerson);
-   $this->orden = utf8_encode($result['mensaje']);
+   $result = $this->_soapClient->call('DESPACHOS', $dataInputOrden);
+   $this->orden = utf8_encode($result['Resultado']);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
   }

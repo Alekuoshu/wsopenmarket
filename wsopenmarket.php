@@ -8,6 +8,10 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
+//  http://www.openmarket.com.co/WS-Picking/arecibo_picking.aspx?wsdl
+//  http://www.mauricioalpizar.com/ejemplos/nusoap/mi_ws1.php?wsdl
+
+
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
@@ -104,6 +108,7 @@ class Wsopenmarket extends Module
   $res &= $this->registerHook('backOfficeHeader');
   $res &= $this->registerHook('displayHome');
   $res &= $this->registerHook('ActionPaymentConfirmation');
+  $res &= $this->registerHook('ActionCartSave');
   return $res;
  }
 
@@ -119,6 +124,7 @@ class Wsopenmarket extends Module
   $res &= $this->unRegisterHook('backOfficeHeader');
   $res &= $this->unRegisterHook('displayHome');
   $res &= $this->unRegisterHook('ActionPaymentConfirmation');
+  $res &= $this->unRegisterHook('ActionCartSave');
   return $res;
  }
 
@@ -369,6 +375,10 @@ class Wsopenmarket extends Module
     // set to smarty template values
     $this->context->smarty->assign('orden', $orden);
 
+    // Hook::exec('ActionCartSave');
+    // Hook::exec('ActionPaymentConfirmation');
+
+
     return $this->display(__FILE__, 'wsopenmarketSandbox.tpl');
 
    } catch (Exception $e) {
@@ -377,8 +387,25 @@ class Wsopenmarket extends Module
    }
 
   } else {
-   self::logtxt("probando log en hookDisplayHome() en modo Production");
-   return $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL;
+    try {
+      self::logtxt("probando log en hookDisplayHome() en modo Production");
+
+      require_once 'ws/orden_client.php';
+
+      $wsOrden = new Orden();
+      $orden = $wsOrden->getDataOrden();
+
+      // set to smarty template values
+      $this->context->smarty->assign('orden', $orden);
+      self::logtxt("Resultado: $orden");
+
+      return $this->display(__FILE__, 'wsopenmarketMessage.tpl');
+      
+    } catch (Exception $e) {
+        $this->setErrorMessage("Exeptions on hookDisplayHome: " . $e->getMessage());
+        self::logtxt("Exeptions on hookDisplayHome: " . $e->getMessage());
+    }
+
   }
 
  }
@@ -388,6 +415,8 @@ class Wsopenmarket extends Module
  {
 
   self::logtxt("se ejecuto ActionPaymentConfirmation Successful!!");
+
+  // $order = new Order((int) $id_order);
 
   $id_order = $params['id_order'];
   $order = $params['order'];
@@ -399,7 +428,12 @@ class Wsopenmarket extends Module
    'customer' => $customer
   );
 
-  return var_dump($result);
+  // Hook::exec('actionPaymentConfirmation', array('id_order' => (int) $order->id), null, false, true, false, $order->id_shop);
+  // Hook::exec('ActionPaymentConfirmation');
+
+  // return var_dump($result);
+
+
   // $oOrder = new Order($aParams['id_order']);
 
     // if ($aParams['newOrderStatus']->id == Configuration::get('PS_OS_PAYMENT')) {
@@ -407,6 +441,32 @@ class Wsopenmarket extends Module
     //     $oOrder->save();
     // }
 
+
+ }
+
+
+ // hook para testear los productos del carrito
+ public function hookActionCartSave($params)
+ {
+
+  self::logtxt("se ejecuto hookActionCartSave Successful!!");
+
+  // $order = new Order((int) $id_order);
+
+  $id_order = $params['id_order'];
+  $order = $params['order'];
+  $customer = $params['customer'];
+
+  $result = array(
+   'id_order' => $id_order,
+   'order' => $order,
+   'customer' => $customer
+  );
+
+  // Hook::exec('actionPaymentConfirmation', array('id_order' => (int) $order->id), null, false, true, false, $order->id_shop);
+  // return Hook::exec('ActionCartSave');
+
+  // return var_dump($result);
 
  }
 }
