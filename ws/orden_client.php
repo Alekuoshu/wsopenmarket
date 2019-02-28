@@ -100,44 +100,44 @@ $DESPACHOS = array(
   'Usuario' =>  "WSABBOTT",
   'Clave' => "WS.2019.ABBOTT",
   'Sdtrecoutbounddelivery' => array(
-      'SDTRecOutboundDeliveryItem' => array(
-
+      'SDTRecOutboundDeliveryItem' => [
           'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC1234819",
-          'OrdenCompra' => "OC1234909",
-          'NroPedido'   => "102",
-          'FechaPedido' => "26/02/2019",
-          'CodigoDestinatario' => "999",
+          'Documento' => "DOC03",
+          'OrdenCompra' => "DOC03",
+          'NroPedido'   => "DOC03",
+          'FechaPedido' => "28/02/2019",
+          'CodigoDestinatario' => "16355867",
           'NombreDestinatario' => "Alejandro Villegas",
-          'DireccionDestinatario' => "Av. 69a, Cra. 119a, #118b-11. Engativa La Faena",
+          'DireccionDestinatario' => "Av Calle 72, #119b-30, Bogotá",
           'CiudadDestinatario' => "11001",
           'TelefonoDestinatario' => "3022471141",
           'CelularDestinatario' => "3022471141",
-          'FechaMinimaEntrega' => "26/02/2019",
-          'FechaMaximaEntrega' => "26/02/2019",
-          'Observaciones' => "Testing WS1",
-          'ValorAsegurado' => 8000,
-          'FechaReciboIntegracion' => "26/02/2019", //opcional
+          'FechaMinimaEntrega' => "28/02/2019",
+          'FechaMaximaEntrega' => "28/02/2019",
+          'Observaciones' => "Testeando WS1",
+          'ValorAsegurado' => "30000",
+          'FechaReciboIntegracion' => "28/02/2019", //opcional
           'EstadoProceso' => "N", //siempre N
           'MensajeRecibido' => "", //vacio
           'MensajeRespueta' => "", //vacio
-      ),
+      ]
   ),
   'Sdt_productos' => array(
     'SDT_ProductosItem' => [
           'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC1234819",
-          'OrdenCompra' => "OC1234909",
-          'Consecutivo'   => "2",
-          'CodigoProducto' => "PSRE12560",
+          'Documento' => "DOC03",
+          'OrdenCompra' => "DOC03",
+          'Consecutivo'   => "1",
+          'CodigoProducto' => "PRD02",
           'Lote' => "", //vacio
-          'UnidadesSolucitadas' => 10,
-          'Bodega' => "", //vacio
+          'UnidadesSolucitadas' => "20",
+          'Bodega' => "NA", //vacio o NA
           'EstadoRegistro' => "N", //siempre N
     ]
   ),
-
 );
+
+
 // foreach( $products as $product ) {
 //   $DESPACHOS[ 'Sdt_productos' ]['SDT_ProductosItem'][] = [
 //           'Nit' => "860002134-9", //siempre este
@@ -154,14 +154,16 @@ $DESPACHOS = array(
 
   // get data
   try {
-//    $result = $this->_soapClient->call('DESPACHOS', $dataInputCredentials);
    $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS);
     if ( is_array( $result ) ) {
       var_dump( $result );
       exit();
     }
+    if (is_soap_fault($result)) {
+      trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
+      exit();
+    }
    $this->orden = utf8_encode($result);
-  //  var_dump($dataInputOrdenItem);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
   }
