@@ -86,7 +86,7 @@ class Orden
   *
   * @return string
   */
- public function getDataOrden()
+ public function getDataOrden( $products )
  {
   $err = $this->_soapClient->getError();
   if ($err) {
@@ -96,58 +96,72 @@ class Orden
   }
 
 // add input params
+$DESPACHOS = array(
+  'Usuario' =>  "WSABBOTT",
+  'Clave' => "WS.2019.ABBOTT",
+  'Sdtrecoutbounddelivery' => array(
+      'SDTRecOutboundDeliveryItem' => array(
 
-$dataInputCredentials = array(
-    'Usuario' =>  "WSABBOTT",
-    'Clave' => "WS.2019.ABBOTT",
+          'Nit' => "860002134-9", //siempre este
+          'Documento' => "DOC1234819",
+          'OrdenCompra' => "OC1234909",
+          'NroPedido'   => "102",
+          'FechaPedido' => "26/02/2019",
+          'CodigoDestinatario' => "999",
+          'NombreDestinatario' => "Alejandro Villegas",
+          'DireccionDestinatario' => "Av. 69a, Cra. 119a, #118b-11. Engativa La Faena",
+          'CiudadDestinatario' => "11001",
+          'TelefonoDestinatario' => "3022471141",
+          'CelularDestinatario' => "3022471141",
+          'FechaMinimaEntrega' => "26/02/2019",
+          'FechaMaximaEntrega' => "26/02/2019",
+          'Observaciones' => "Testing WS1",
+          'ValorAsegurado' => 8000,
+          'FechaReciboIntegracion' => "26/02/2019", //opcional
+          'EstadoProceso' => "N", //siempre N
+          'MensajeRecibido' => "", //vacio
+          'MensajeRespueta' => "", //vacio
+      ),
+  ),
+  'Sdt_productos' => array(
+    'SDT_ProductosItem' => [
+          'Nit' => "860002134-9", //siempre este
+          'Documento' => "DOC1234819",
+          'OrdenCompra' => "OC1234909",
+          'Consecutivo'   => "2",
+          'CodigoProducto' => "PSRE12560",
+          'Lote' => "", //vacio
+          'UnidadesSolucitadas' => 10,
+          'Bodega' => "", //vacio
+          'EstadoRegistro' => "N", //siempre N
+    ]
+  ),
+
 );
-
-  $dataInputOrden = array(
-    "SDTRecOutboundDelivery" => array(
-        'Nit' => "860002134-9", //siempre este
-        'Documento' => "DOC1",
-        'OrdenCompra' => "OC1",
-        'NroPedido'   => "1",
-        'FechaPedido' => "26/02/2019",
-        'CodigoDestinatario' => "01125",
-        'NombreDestinatario' => "Alejandro Villegas",
-        'DireccionDestinatario' => "Av. 69a, Cra. 119a, #118b-11. Engativa La Faena",
-        'CiudadDestinatario' => "11001",
-        'TelefonoDestinatario' => "3022471141",
-        'CelularDestinatario' => "3022471141",
-        'FechaMinimaEntrega' => "26/02/2019",
-        'FechaMaximaEntrega' => "26/02/2019",
-        'Observaciones' => "Testing WS1",
-        'ValorAsegurado' => 8000,
-        'FechaReciboIntegracion' => "26/02/2019", //opcional
-        'EstadoProceso' => "N", //siempre N
-        'MensajeRecibido' => "", //vacio
-        'MensajeRespueta' => "", //vacio
-    ),
-  );
-
-  $dataInputOrdenItem = array(
-    "SDT_Productos" => array(
-        'Nit' => "860002134-9", //siempre este
-        'Documento' => "DOC1",
-        'OrdenCompra' => "OC1",
-        'Consecutivo'   => "1",
-        'CodigoProducto' => "Prod01",
-        'Lote' => "", //vacio
-        'UnidadesSolucitadas' => 10,
-        'Bodega' => "", //vacio
-        'EstadoRegistro' => "N", //siempre N
-    ),
-  );
-
-
+// foreach( $products as $product ) {
+//   $DESPACHOS[ 'Sdt_productos' ]['SDT_ProductosItem'][] = [
+//           'Nit' => "860002134-9", //siempre este
+//           'Documento' => "DOC1234819",
+//           'OrdenCompra' => "OC1234909",
+//           'Consecutivo'   => "2",
+//           'CodigoProducto' => "PSRE12560",
+//           'Lote' => "", //vacio
+//           'UnidadesSolucitadas' => 10,
+//           'Bodega' => "", //vacio
+//           'EstadoRegistro' => "N", //siempre N
+//       ]
+// }
 
   // get data
   try {
 //    $result = $this->_soapClient->call('DESPACHOS', $dataInputCredentials);
-   $result = $this->_soapClient->call('DESPACHOS', $dataInputCredentials, $dataInputOrden, $dataInputOrdenItem);
-   $this->orden = utf8_encode($result['Resultado']);
-   var_dump($dataInputOrdenItem);
+   $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS);
+    if ( is_array( $result ) ) {
+      var_dump( $result );
+      exit();
+    }
+   $this->orden = utf8_encode($result);
+  //  var_dump($dataInputOrdenItem);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
   }
