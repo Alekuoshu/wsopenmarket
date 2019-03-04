@@ -102,40 +102,55 @@ $DESPACHOS = array(
   'Sdtrecoutbounddelivery' => array(
       'SDTRecOutboundDeliveryItem' => [
           'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC03",
-          'OrdenCompra' => "DOC03",
-          'NroPedido'   => "DOC03",
-          'FechaPedido' => "28/02/2019",
+          'Documento' => "DOC01",
+          'OrdenCompra' => "DOC01",
+          'NroPedido'   => "DOC01",
+          'FechaPedido' => "04/03/2019",
           'CodigoDestinatario' => "16355867",
           'NombreDestinatario' => "Alejandro Villegas",
           'DireccionDestinatario' => "Av Calle 72, #119b-30, Bogotá",
           'CiudadDestinatario' => "11001",
           'TelefonoDestinatario' => "3022471141",
           'CelularDestinatario' => "3022471141",
-          'FechaMinimaEntrega' => "28/02/2019",
-          'FechaMaximaEntrega' => "28/02/2019",
+          'FechaMinimaEntrega' => "04/03/2019",
+          'FechaMaximaEntrega' => "04/03/2019",
           'Observaciones' => "Testeando WS1",
-          'ValorAsegurado' => "30000",
-          'FechaReciboIntegracion' => "28/02/2019", //opcional
+          'ValorAsegurado' => 30000,
+          'FechaReciboIntegracion' => "04/03/2019", //opcional
           'EstadoProceso' => "N", //siempre N
           'MensajeRecibido' => "", //vacio
-          'MensajeRespueta' => "", //vacio
+          'MensajeRespueta' => "" //vacio
       ]
   ),
   'Sdt_productos' => array(
     'SDT_ProductosItem' => [
           'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC03",
-          'OrdenCompra' => "DOC03",
-          'Consecutivo'   => "1",
-          'CodigoProducto' => "PRD02",
+          'Documento' => "DOC01",
+          'OrdenCompra' => "DOC01",
+          'Consecutivo'   => 1,
+          'CodigoProducto' => "PROD01",
           'Lote' => "", //vacio
-          'UnidadesSolucitadas' => "20",
-          'Bodega' => "NA", //vacio o NA
-          'EstadoRegistro' => "N", //siempre N
+          'UnidadesSolucitadas' => 10,
+          'Bodega' => "", //vacio o NA
+          'EstadoRegistro' => "N" //siempre N
     ]
   ),
 );
+
+
+// 'Sdt_productos' => array(
+//     'SDT_ProductosItem' => [
+//           'Nit' => "860002134-9", //siempre este
+//           'Documento' => "DC10",
+//           'OrdenCompra' => "OC10",
+//           'Consecutivo'   => 1,
+//           'CodigoProducto' => "P0025",
+//           'Lote' => "", //vacio
+//           'UnidadesSolucitadas' => 20,
+//           'Bodega' => "NA", //vacio o NA
+//           'EstadoRegistro' => "N", //siempre N
+//     ]
+//   ),
 
 
 // foreach( $products as $product ) {

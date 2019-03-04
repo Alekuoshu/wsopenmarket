@@ -3,7 +3,7 @@
     <name>wsopenmarket</name>
     <displayName><![CDATA[WS Open Market]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[Modulo para la integracion con open market]]></description>
+    <description><![CDATA[Open Market integration module]]></description>
     <author><![CDATA[Farmalisto]]></author>
     <tab><![CDATA[front_office_features]]></tab>
 	<confirmUninstall><![CDATA[Are you sure you want to unistall this module?]]></confirmUninstall>
