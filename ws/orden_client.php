@@ -7,7 +7,6 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class Orden
 {
  /**
@@ -32,6 +31,8 @@ class Orden
   $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL = Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL');
 
   require_once _PS_MODULE_DIR_ . 'wsopenmarket/lib/nusoap-0.9.5/lib/nusoap.php';
+  // header("Content-Type: text/xml");
+
 
   // set url from web services
   if ($this->WSOPENMARKET_SANDBOX_MODE == 1) {
@@ -43,6 +44,7 @@ class Orden
   }
 
   $this->_soapClient->soap_defencoding = 'UTF-8';
+
  }
 
  /**
@@ -86,7 +88,7 @@ class Orden
   *
   * @return string
   */
- public function getDataOrden( $products )
+ public function getDataOrden()
  {
   $err = $this->_soapClient->getError();
   if ($err) {
@@ -96,61 +98,109 @@ class Orden
   }
 
 // add input params
-$DESPACHOS = array(
-  'Usuario' =>  "WSABBOTT",
-  'Clave' => "WS.2019.ABBOTT",
-  'Sdtrecoutbounddelivery' => array(
-      'SDTRecOutboundDeliveryItem' => [
-          'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC01",
-          'OrdenCompra' => "DOC01",
-          'NroPedido'   => "DOC01",
-          'FechaPedido' => "04/03/2019",
-          'CodigoDestinatario' => "16355867",
-          'NombreDestinatario' => "Alejandro Villegas",
-          'DireccionDestinatario' => "Av Calle 72, #119b-30, Bogotá",
-          'CiudadDestinatario' => "11001",
-          'TelefonoDestinatario' => "3022471141",
-          'CelularDestinatario' => "3022471141",
-          'FechaMinimaEntrega' => "04/03/2019",
-          'FechaMaximaEntrega' => "04/03/2019",
-          'Observaciones' => "Testeando WS1",
-          'ValorAsegurado' => 30000,
-          'FechaReciboIntegracion' => "04/03/2019", //opcional
-          'EstadoProceso' => "N", //siempre N
-          'MensajeRecibido' => "", //vacio
-          'MensajeRespueta' => "" //vacio
-      ]
-  ),
-  'Sdt_productos' => array(
-    'SDT_ProductosItem' => [
-          'Nit' => "860002134-9", //siempre este
-          'Documento' => "DOC01",
-          'OrdenCompra' => "DOC01",
-          'Consecutivo'   => 1,
-          'CodigoProducto' => "PROD01",
-          'Lote' => "", //vacio
-          'UnidadesSolucitadas' => 10,
-          'Bodega' => "", //vacio o NA
-          'EstadoRegistro' => "N" //siempre N
-    ]
-  ),
-);
-
-
-// 'Sdt_productos' => array(
+// $DESPACHOS = array(
+//   'Usuario' =>  "WSABBOTT",
+//   'Clave' => "WS.2019.ABBOTT",
+//   'Sdtrecoutbounddelivery' => array(
+//       'SDTRecOutboundDeliveryItem' => [
+//           'Nit' => "860002134-9", //siempre este
+//           'Documento' => "111213",
+//           'OrdenCompra' => "111213",
+//           'NroPedido'   => "111213",
+//           'FechaPedido' => "05/03/2019",
+//           'CodigoDestinatario' => "16355867",
+//           'NombreDestinatario' => "Alejandro Villegas",
+//           'DireccionDestinatario' => "Engativa",
+//           'CiudadDestinatario' => "11001",
+//           'TelefonoDestinatario' => "3022471141",
+//           'CelularDestinatario' => "3022471141",
+//           'FechaMinimaEntrega' => "05/03/2019",
+//           'FechaMaximaEntrega' => "05/03/2019",
+//           'Observaciones' => "Prueba",
+//           'ValorAsegurado' => 30000,
+//           'FechaReciboIntegracion' => "", //opcional
+//           'EstadoProceso' => "N", //siempre N
+//           'MensajeRecibido' => "", //vacio
+//           'MensajeRespueta' => "", //vacio
+//       ]
+//   ),
+//   'Sdt_productos' => array(
 //     'SDT_ProductosItem' => [
 //           'Nit' => "860002134-9", //siempre este
-//           'Documento' => "DC10",
-//           'OrdenCompra' => "OC10",
+//           'Documento' => "111213",
+//           'OrdenCompra' => "111213",
 //           'Consecutivo'   => 1,
-//           'CodigoProducto' => "P0025",
+//           'CodigoProducto' => "PR78910",
 //           'Lote' => "", //vacio
-//           'UnidadesSolucitadas' => 20,
-//           'Bodega' => "NA", //vacio o NA
+//           'UnidadesSolucitadas' => 10,
+//           'Bodega' => "", //vacio o NA
 //           'EstadoRegistro' => "N", //siempre N
 //     ]
 //   ),
+// );
+
+$DESPACHOS = array();
+$DESPACHOS['Usuario'] = 'WSABBOTT';
+$DESPACHOS['Clave'] = 'WS.2019.ABBOTT';
+// Cabecera
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '111213';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '111213';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '111213';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '05/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Engativa';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '05/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '05/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = 'Prueba';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 30000;
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = '';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = '';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = '';
+// Detalle
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '111213';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '111213';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PR78910';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = '';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 10;
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = '';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
+
+var_dump($DESPACHOS);
+
+  // get data
+  try {
+   $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS);
+    if ( is_array( $result ) ) {
+      var_dump( $result );
+      exit();
+    }
+    $this->orden = utf8_encode($result);
+  } catch (SoapFault $fault) {
+   trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
+  }
+  return $this->orden;
+  exit();
+ }
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 // foreach( $products as $product ) {
@@ -166,24 +216,4 @@ $DESPACHOS = array(
 //           'EstadoRegistro' => "N", //siempre N
 //       ]
 // }
-
-  // get data
-  try {
-   $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS);
-    if ( is_array( $result ) ) {
-      var_dump( $result );
-      exit();
-    }
-    if (is_soap_fault($result)) {
-      trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
-      exit();
-    }
-   $this->orden = utf8_encode($result);
-  } catch (SoapFault $fault) {
-   trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
-  }
-  return $this->orden;
-  exit();
- }
-
-}
+// var_dump($DESPACHOS);
