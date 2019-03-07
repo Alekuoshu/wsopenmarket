@@ -24,7 +24,8 @@ class Server
    'struct',
    'all',
    '',
-   array('NroPedido' => array('name' => 'NroPedido', 'type' => 'xsd:int'),
+   array('Token' => array('name' => 'Token', 'type' => 'xsd:string'),
+    'NroPedido' => array('name' => 'NroPedido', 'type' => 'xsd:int'),
     'Fecha' => array('name' => 'Fecha', 'type' => 'xsd:string'),
     'Hora' => array('name' => 'Hora', 'type' => 'xsd:string'),
     'Estado' => array('name' => 'Estado', 'type' => 'xsd:string'))
