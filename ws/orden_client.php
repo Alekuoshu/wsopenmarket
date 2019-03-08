@@ -41,9 +41,11 @@ class Orden
   } else {
    // init soap client on production mode
    $this->_soapClient = new nusoap_client($this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL);
-  }
+   $this->_soapClient->debug(); //debug mode
 
+  }
   $this->_soapClient->soap_defencoding = 'UTF-8';
+
 
  }
 
@@ -144,18 +146,18 @@ $DESPACHOS['Usuario'] = 'WSABBOTT';
 $DESPACHOS['Clave'] = 'WS.2019.ABBOTT';
 // Cabecera
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '111213';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '111213';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '111213';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '05/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '350';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '350';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '350';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '08/03/2019';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Engativa';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '05/03/2019';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '05/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '08/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '08/03/2019';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = 'Prueba';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 30000;
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = '';
@@ -164,8 +166,8 @@ $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecib
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = '';
 // Detalle
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '111213';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '111213';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '350';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '350';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PR78910';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = '';
@@ -173,11 +175,22 @@ $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 10;
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = '';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
 
-var_dump($DESPACHOS);
+
+var_dump($DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega']);
 
   // get data
   try {
-   $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS);
+   $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS, 'WSPicking');
+
+   echo '<h2>Request</h2>';
+echo '<pre>' . htmlspecialchars($this->_soapClient->request, ENT_QUOTES) . '</pre>';
+echo '<h2>Response</h2>';
+echo '<pre>' . htmlspecialchars($this->_soapClient->response, ENT_QUOTES) . '</pre>';
+echo '<h2>Debug:</h2>';
+echo '<pre>' .htmlspecialchars($this->_soapClient->debug_str, ENT_QUOTES) . '</pre>';
+
+   echo '<br>'. utf8_encode($result);
+
     if ( is_array( $result ) ) {
       var_dump( $result );
       exit();
@@ -186,6 +199,7 @@ var_dump($DESPACHOS);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
   }
+   
   return $this->orden;
   exit();
  }

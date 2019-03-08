@@ -7598,16 +7598,26 @@ class nusoap_client extends nusoap_base
                     $payload = "<$operation>" . $payload . "</$operation>";
                 }
             } else {
+                // fixed
+                // $this->debug("wrapping RPC request with encoded method element");
+                // if ($namespace) {
+                //     $payload = "<$nsPrefix:$operation xmlns:$nsPrefix=\"$namespace\">" .
+                //         $payload .
+                //         "</$nsPrefix:$operation>";
+                // } else {
+                //     $payload = "<$operation>" .
+                //         $payload .
+                //         "</$operation>";
+                // }
                 $this->debug("wrapping RPC request with encoded method element");
                 if ($namespace) {
-                    $payload = "<$nsPrefix:$operation xmlns:$nsPrefix=\"$namespace\">" .
-                        $payload .
-                        "</$nsPrefix:$operation>";
+                    $payload = "<$operation xmlns:wsp=\"$namespace\">" .
+                        $payload . "</$operation>";
                 } else {
                     $payload = "<$operation>" .
-                        $payload .
-                        "</$operation>";
+                            $payload . "</$operation>";
                 }
+
             }
         }
         // serialize envelope
