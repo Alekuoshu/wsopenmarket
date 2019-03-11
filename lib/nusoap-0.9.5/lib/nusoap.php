@@ -469,7 +469,7 @@ class nusoap_base
             $this->debug("serialize_val: serialize null");
             if ($use == 'literal') {
                 // TODO: depends on minOccurs
-                $xml = "<$name$xmlns$atts/>";
+                $xml = "<wsp:$name$xmlns$atts/>";
                 $this->debug("serialize_val returning $xml");
                 return $xml;
             } else {
@@ -478,7 +478,7 @@ class nusoap_base
                 } else {
                     $type_str = '';
                 }
-                $xml = "<$name$xmlns$type_str$atts xsi:nil=\"true\"/>";
+                $xml = "<wsp:$name$xmlns$type_str$atts xsi:nil=\"true\"/wsp:>";
                 $this->debug("serialize_val returning $xml");
                 return $xml;
             }
@@ -496,11 +496,11 @@ class nusoap_base
                 $val = $this->expandEntities($val);
             }
             if ($use == 'literal') {
-                $xml = "<$name$xmlns$atts>$val</$name>";
+                $xml = "<wsp:$name$xmlns$atts>$val</wsp:$name>";
                 $this->debug("serialize_val returning $xml");
                 return $xml;
             } else {
-                $xml = "<$name$xmlns xsi:type=\"xsd:$type\"$atts>$val</$name>";
+                $xml = "<wsp:$name$xmlns xsi:type=\"xsd:$type\"$atts>$val</wsp:$name>";
                 $this->debug("serialize_val returning $xml");
                 return $xml;
             }
@@ -516,34 +516,34 @@ class nusoap_base
                     $val = 0;
                 }
                 if ($use == 'literal') {
-                    $xml .= "<$name$xmlns$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns$atts>$val</wsp:$name>";
                 } else {
-                    $xml .= "<$name$xmlns xsi:type=\"xsd:boolean\"$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns xsi:type=\"xsd:boolean\"$atts>$val</wsp:$name>";
                 }
                 break;
             case (is_int($val) || is_long($val) || $type == 'int'):
                 $this->debug("serialize_val: serialize int");
                 if ($use == 'literal') {
-                    $xml .= "<$name$xmlns$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns$atts>$val</wsp:$name>";
                 } else {
-                    $xml .= "<$name$xmlns xsi:type=\"xsd:int\"$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns xsi:type=\"xsd:int\"$atts>$val</wsp:$name>";
                 }
                 break;
             case (is_float($val) || is_double($val) || $type == 'float'):
                 $this->debug("serialize_val: serialize float");
                 if ($use == 'literal') {
-                    $xml .= "<$name$xmlns$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns$atts>$val</wsp:$name>";
                 } else {
-                    $xml .= "<$name$xmlns xsi:type=\"xsd:float\"$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns xsi:type=\"xsd:float\"$atts>$val</wsp:$name>";
                 }
                 break;
             case (is_string($val) || $type == 'string'):
                 $this->debug("serialize_val: serialize string");
                 $val = $this->expandEntities($val);
                 if ($use == 'literal') {
-                    $xml .= "<$name$xmlns$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns$atts>$val</wsp:$name>";
                 } else {
-                    $xml .= "<$name$xmlns xsi:type=\"xsd:string\"$atts>$val</$name>";
+                    $xml .= "<wsp:$name$xmlns xsi:type=\"xsd:string\"$atts>$val</wsp:$name>";
                 }
                 break;
             case is_object($val):
@@ -570,9 +570,9 @@ class nusoap_base
                     $type_str = '';
                 }
                 if ($use == 'literal') {
-                    $xml .= "<$name$xmlns$atts>$pXml</$name>";
+                    $xml .= "<wsp:$name$xmlns$atts>$pXml</wsp:$name>";
                 } else {
-                    $xml .= "<$name$xmlns$type_str$atts>$pXml</$name>";
+                    $xml .= "<wsp:$name$xmlns$type_str$atts>$pXml</wsp:$name>";
                 }
                 break;
                 break;
@@ -639,7 +639,7 @@ class nusoap_base
                         }
                     }
                     // TODO: for array in literal, there is no wrapper here
-                    $xml = "<$name$xmlns$type_str$atts>" . $xml . "</$name>";
+                    $xml = "<wsp:$name$xmlns$type_str$atts>" . $xml . "</wsp:$name>";
                 } else {
                     // got a struct
                     $this->debug("serialize_val: serialize struct");
@@ -2539,7 +2539,7 @@ class soap_transport_http extends nusoap_base
                 // recent versions of cURL turn on peer/host checking by default,
                 // while PHP binaries are not compiled with a default location for the
                 // CA cert bundle, so disable peer/host checking.
-                //$this->setCurlOption(CURLOPT_CAINFO, 'f:\php-4.3.2-win32\extensions\curl-ca-bundle.crt');		
+                //$this->setCurlOption(CURLOPT_CAINFO, 'f:\php-4.3.2-win32\extensions\curl-ca-bundle.crt');
                 $this->setCurlOption(CURLOPT_SSL_VERIFYPEER, 0);
                 $this->setCurlOption(CURLOPT_SSL_VERIFYHOST, 0);
 
@@ -7523,10 +7523,11 @@ class nusoap_client extends nusoap_base
             $use = $opData['input']['use'];
             // add ns to ns array
             if ($namespace != '' && !isset($this->wsdl->namespaces[$namespace])) {
-                $nsPrefix = 'ns' . rand(1000, 9999);
+                $nsPrefix = 'wsp' . rand(1000, 9999);
                 $this->wsdl->namespaces[$nsPrefix] = $namespace;
             }
-            $nsPrefix = $this->wsdl->getPrefixFromNamespace($namespace);
+            // fixed
+            $nsPrefix = $this->wsdl->getPrefixFromNamespace('wsp:');
             // serialize payload
             if (is_string($params)) {
                 $this->debug("serializing param string for WSDL operation $operation");
@@ -7562,8 +7563,9 @@ class nusoap_client extends nusoap_base
         } else {
             // no WSDL
             //$this->namespaces['ns1'] = $namespace;
-            $nsPrefix = 'ns' . rand(1000, 9999);
-            // serialize 
+            // fixed
+            $nsPrefix = 'wsp' . rand(1000, 9999);
+            // serialize
             $payload = '';
             if (is_string($params)) {
                 $this->debug("serializing param string for operation $operation");

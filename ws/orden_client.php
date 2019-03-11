@@ -31,8 +31,6 @@ class Orden
   $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL = Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL');
 
   require_once _PS_MODULE_DIR_ . 'wsopenmarket/lib/nusoap-0.9.5/lib/nusoap.php';
-  // header("Content-Type: text/xml");
-
 
   // set url from web services
   if ($this->WSOPENMARKET_SANDBOX_MODE == 1) {
@@ -41,7 +39,10 @@ class Orden
   } else {
    // init soap client on production mode
    $this->_soapClient = new nusoap_client($this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL);
-   $this->_soapClient->debug(); //debug mode
+  //  $this->_soapClient->namespaces = array(
+  //    'wsp' => "WSPicking"
+  //   );
+  //  $this->_soapClient->debug(); //debug mode
 
   }
   $this->_soapClient->soap_defencoding = 'UTF-8';
@@ -100,55 +101,14 @@ class Orden
   }
 
 // add input params
-// $DESPACHOS = array(
-//   'Usuario' =>  "WSABBOTT",
-//   'Clave' => "WS.2019.ABBOTT",
-//   'Sdtrecoutbounddelivery' => array(
-//       'SDTRecOutboundDeliveryItem' => [
-//           'Nit' => "860002134-9", //siempre este
-//           'Documento' => "111213",
-//           'OrdenCompra' => "111213",
-//           'NroPedido'   => "111213",
-//           'FechaPedido' => "05/03/2019",
-//           'CodigoDestinatario' => "16355867",
-//           'NombreDestinatario' => "Alejandro Villegas",
-//           'DireccionDestinatario' => "Engativa",
-//           'CiudadDestinatario' => "11001",
-//           'TelefonoDestinatario' => "3022471141",
-//           'CelularDestinatario' => "3022471141",
-//           'FechaMinimaEntrega' => "05/03/2019",
-//           'FechaMaximaEntrega' => "05/03/2019",
-//           'Observaciones' => "Prueba",
-//           'ValorAsegurado' => 30000,
-//           'FechaReciboIntegracion' => "", //opcional
-//           'EstadoProceso' => "N", //siempre N
-//           'MensajeRecibido' => "", //vacio
-//           'MensajeRespueta' => "", //vacio
-//       ]
-//   ),
-//   'Sdt_productos' => array(
-//     'SDT_ProductosItem' => [
-//           'Nit' => "860002134-9", //siempre este
-//           'Documento' => "111213",
-//           'OrdenCompra' => "111213",
-//           'Consecutivo'   => 1,
-//           'CodigoProducto' => "PR78910",
-//           'Lote' => "", //vacio
-//           'UnidadesSolucitadas' => 10,
-//           'Bodega' => "", //vacio o NA
-//           'EstadoRegistro' => "N", //siempre N
-//     ]
-//   ),
-// );
-
 $DESPACHOS = array();
 $DESPACHOS['Usuario'] = 'WSABBOTT';
 $DESPACHOS['Clave'] = 'WS.2019.ABBOTT';
-// Cabecera
+// cabecera
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '350';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '350';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '350';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '402';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '402';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '402';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '08/03/2019';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
@@ -166,30 +126,28 @@ $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecib
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = '';
 // Detalle
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '350';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '350';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '402';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '402';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PR78910';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PR78911';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = '';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 10;
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = '';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
 
 
-var_dump($DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega']);
-
   // get data
   try {
    $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS, 'WSPicking');
 
-   echo '<h2>Request</h2>';
-echo '<pre>' . htmlspecialchars($this->_soapClient->request, ENT_QUOTES) . '</pre>';
-echo '<h2>Response</h2>';
-echo '<pre>' . htmlspecialchars($this->_soapClient->response, ENT_QUOTES) . '</pre>';
-echo '<h2>Debug:</h2>';
-echo '<pre>' .htmlspecialchars($this->_soapClient->debug_str, ENT_QUOTES) . '</pre>';
+    echo '<h2>Request</h2>';
+    echo '<pre>' . htmlspecialchars($this->_soapClient->request, ENT_QUOTES) . '</pre>';
+    echo '<h2>Response</h2>';
+    echo '<pre>' . htmlspecialchars($this->_soapClient->response, ENT_QUOTES) . '</pre>';
+    echo '<h2>Debug:</h2>';
+    echo '<pre>' .htmlspecialchars($this->_soapClient->debug_str, ENT_QUOTES) . '</pre>';
 
-   echo '<br>'. utf8_encode($result);
+    echo '<br>'. utf8_encode($result);
 
     if ( is_array( $result ) ) {
       var_dump( $result );
@@ -198,8 +156,9 @@ echo '<pre>' .htmlspecialchars($this->_soapClient->debug_str, ENT_QUOTES) . '</p
     $this->orden = utf8_encode($result);
   } catch (SoapFault $fault) {
    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
+   echo "SOAP Fault: " . $fault->getMessage() . "<br />\n";
   }
-   
+
   return $this->orden;
   exit();
  }
@@ -211,10 +170,52 @@ echo '<pre>' .htmlspecialchars($this->_soapClient->debug_str, ENT_QUOTES) . '</p
 
 
 
+// $xml = '<wsp:DESPACHOS>
+//          <wsp:Usuario>WSABBOTT</wsp:Usuario>
+//          <wsp:Clave>WS.2019.ABBOTT</wsp:Clave>
+//          <wsp:Sdtrecoutbounddelivery>
+//             <wsp:SDTRecOutboundDeliveryItem>
+//                <wsp:Nit>860002134-9</wsp:Nit>
+//                <wsp:Documento>401</wsp:Documento>
+//                <wsp:OrdenCompra>401</wsp:OrdenCompra>
+//                <wsp:NroPedido>401</wsp:NroPedido>
+//                <wsp:FechaPedido>10/03/2019</wsp:FechaPedido>
+//                <wsp:CodigoDestinatario>10/03/2019</wsp:CodigoDestinatario>
+//                <wsp:NombreDestinatario>Alejandro Villegas</wsp:NombreDestinatario>
+//                <wsp:DireccionDestinatario>Engatinva</wsp:DireccionDestinatario>
+//                <wsp:CiudadDestinatario>11001</wsp:CiudadDestinatario>
+//                <wsp:TelefonoDestinatario>3022471141</wsp:TelefonoDestinatario>
+//                <wsp:CelularDestinatario>3022471141</wsp:CelularDestinatario>
+//                <wsp:FechaMinimaEntrega>10/03/2019</wsp:FechaMinimaEntrega>
+//                <wsp:FechaMaximaEntrega>10/03/2019</wsp:FechaMaximaEntrega>
+//                <wsp:Observaciones>Prueba</wsp:Observaciones>
+//                <wsp:ValorAsegurado>20000</wsp:ValorAsegurado>
+//                <wsp:FechaReciboIntegracion></wsp:FechaReciboIntegracion>
+//                <wsp:EstadoProceso>N?</wsp:EstadoProceso>
+//                <wsp:MensajeRecibido></wsp:MensajeRecibido>
+//                <wsp:MensajeRespueta></wsp:MensajeRespueta>
+//             </wsp:SDTRecOutboundDeliveryItem>
+//          </wsp:Sdtrecoutbounddelivery>
+//          <wsp:Sdt_productos>
+//             <wsp:SDT_ProductosItem>
+//                <wsp:Nit>860002134-9</wsp:Nit>
+//                <wsp:Documento>401</wsp:Documento>
+//                <wsp:OrdenCompra>401</wsp:OrdenCompra>
+//                <wsp:Consecutivo>1</wsp:Consecutivo>
+//                <wsp:CodigoProducto>PROD1101</wsp:CodigoProducto>
+//                <wsp:Lote></wsp:Lote>
+//                <wsp:UnidadesSolucitadas>10</wsp:UnidadesSolucitadas>
+//                <wsp:Bodega></wsp:Bodega>
+//                <wsp:EstadoRegistro>N</wsp:EstadoRegistro>
+//             </wsp:SDT_ProductosItem>
+//          </wsp:Sdt_productos>
+//       </wsp:DESPACHOS>
+// ';
 
 
+// $cabecera = '<NewDataSet><Fila><wsp:SDTRecOutboundDelivery><wsp:SDTRecOutboundDeliveryItem><wsp:Nit>860002134-9</wsp:Nit><wsp:Documento>111213</wsp:Documento><wsp:OrdenCompra>111213</wsp:OrdenCompra><wsp:NroPedido>111213</wsp:NroPedido><wsp:FechaPedido>05/03/2019</wsp:FechaPedido><wsp:CodigoDestinatario>16355867</wsp:CodigoDestinatario><wsp:NombreDestinatario>Alejandro Villegas</wsp:NombreDestinatario><wsp:DireccionDestinatario>Engativa</wsp:DireccionDestinatario><wsp:CiudadDestinatario>11001</wsp:CiudadDestinatario><wsp:TelefonoDestinatario>3022471141</wsp:TelefonoDestinatario><wsp:CelularDestinatario>3022471141</wsp:CelularDestinatario><wsp:FechaMinimaEntrega>05/03/2019</wsp:FechaMinimaEntrega><wsp:FechaMaximaEntrega>05/03/2019</wsp:FechaMaximaEntrega><wsp:Observaciones>Prueba</wsp:Observaciones><wsp:ValorAsegurado>30000</wsp:ValorAsegurado><wsp:FechaReciboIntegracion></wsp:FechaReciboIntegracion><wsp:EstadoProceso>N</wsp:><wsp:MensajeRecibido></wsp:MensajeRecibido><wsp:MensajeRespueta></wsp:MensajeRespueta></wsp:SDTRecOutboundDeliveryItem></wsp:SDTRecOutboundDelivery></Fila></NewDataSet>';
 
-
+// $detalle = '<NewDataSet><Fila><wsp:SDT_Productos><wsp:SDT_ProductosItem><wsp:Nit>860002134-9</wsp:Nit><wsp:Documento>111213</wsp:Documento><wsp:OrdenCompra>111213</wsp:OrdenCompra><wsp:Consecutivo>1</wsp:Consecutivo><wsp:CodigoProducto>PR78910</wsp:CodigoProducto><wsp:Lote></wsp:Lote><wsp:UnidadesSolucitadas>10</wsp:UnidadesSolucitadas><wsp:Bodega></wsp:Bodega><wsp:EstadoRegistro>N</wsp:EstadoRegistro></wsp:SDT_ProductosItem></wsp:SDT_Productos></Fila></NewDataSet>';
 
 
 // foreach( $products as $product ) {
