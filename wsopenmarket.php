@@ -12,8 +12,8 @@
 //  http://www.mauricioalpizar.com/ejemplos/nusoap/mi_ws1.php?wsdl
 
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (!defined('_PS_VERSION_')) {
  exit;
@@ -400,7 +400,7 @@ class Wsopenmarket extends Module
       self::logtxt("Resultado: $orden");
 
       return $this->display(__FILE__, 'wsopenmarketMessage.tpl');
-      
+
     } catch (Exception $e) {
         $this->setErrorMessage("Exeptions on hookDisplayHome: " . $e->getMessage());
         self::logtxt("Exeptions on hookDisplayHome: " . $e->getMessage());
