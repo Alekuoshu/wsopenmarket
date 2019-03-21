@@ -106,32 +106,33 @@ $DESPACHOS['Usuario'] = 'WSABBOTT';
 $DESPACHOS['Clave'] = 'WS.2019.ABBOTT';
 // cabecera
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '403';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '403';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '403';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '08/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '404'; // id orden
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '404'; // id orden
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '404'; // id orden
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '11/03/2019';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Engativa';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
 $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '11/03/2019';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '11/03/2019';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = 'Prueba 40005';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 20000;
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = '';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = '';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = '';
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '11/03/2019'; //fecha del pedido
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '11/03/2019'; // fecha del pedido
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 4500;
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
 // Detalle
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '403';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '403';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 2;
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD106';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '404';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '404';
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD107';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = '';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 5;
+$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 2;
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = '';
 $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
 
@@ -140,7 +141,7 @@ $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
   try {
    $result = $this->_soapClient->call('DESPACHOS', $DESPACHOS, 'WSPicking');
 
-  //  debug
+    // debug //
     // echo '<h2>Request</h2>';
     // echo '<pre>' . htmlspecialchars($this->_soapClient->request, ENT_QUOTES) . '</pre>';
     // echo '<h2>Response</h2>';

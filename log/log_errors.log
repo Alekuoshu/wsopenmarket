@@ -1,6 +1,26 @@
-Monday 11th of March 2019 09:52:55 AM, probando log en hookDisplayHome() en modo Production
-Monday 11th of March 2019 09:52:55 AM, Resultado: 201_Información ingresó satisfactoriamente
-Monday 11th of March 2019 09:53:44 AM, probando log en hookDisplayHome() en modo Production
-Monday 11th of March 2019 09:53:44 AM, Resultado: 201_Información ingresó satisfactoriamente
-Monday 11th of March 2019 10:04:44 AM, probando log en hookDisplayHome() en modo Production
-Monday 11th of March 2019 10:04:44 AM, Resultado: 204_Información incompleta: por lo menos un registro de detalle ya existe
+Wednesday 13th of March 2019 02:34:41 PM, se ejecuto hookActionCartSave Successful!!
+Wednesday 13th of March 2019 02:34:41 PM, probando log en hookDisplayHome() en modo Production
+Wednesday 13th of March 2019 02:34:43 PM, Resultado: 204_Información incompleta: por lo menos un registro de detalle ya existe
+Wednesday 13th of March 2019 02:46:54 PM, Array
+Wednesday 13th of March 2019 02:46:57 PM, Estado de la orden 3 actualizada a: 4
+Wednesday 13th of March 2019 02:50:25 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"3","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"005"}
+Wednesday 13th of March 2019 02:50:26 PM, Estado de la orden 3 actualizada a: 4
+Wednesday 13th of March 2019 02:51:04 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"3","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"005"}
+Wednesday 13th of March 2019 02:51:06 PM, Estado de la orden 3 actualizada a: 4
+Wednesday 13th of March 2019 03:18:16 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"3","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"005"}
+Wednesday 13th of March 2019 03:18:17 PM, Estado de la orden 3 actualizada a: 4
+Wednesday 13th of March 2019 03:19:04 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"1","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"003"}
+Wednesday 13th of March 2019 03:19:06 PM, Estado de la orden 1 actualizada a: 3
+Wednesday 13th of March 2019 03:20:46 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"003"}
+Wednesday 13th of March 2019 03:21:18 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"2","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"004"}
+Wednesday 13th of March 2019 03:22:07 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"2","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"004"}
+Wednesday 13th of March 2019 03:22:45 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"4","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"006"}
+Wednesday 13th of March 2019 03:22:48 PM, Estado de la orden 4 actualizada a: 5
+Wednesday 13th of March 2019 03:23:02 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"2","Fecha":"13-03-2019","Hora":"14:39:25","Estado":"006"}
+Wednesday 13th of March 2019 03:23:04 PM, Estado de la orden 2 actualizada a: 5
+Tuesday 19th of March 2019 09:03:36 AM, se ejecuto hookActionCartSave Successful!!
+Tuesday 19th of March 2019 09:03:36 AM, probando log en hookDisplayHome() en modo Production
+Tuesday 19th of March 2019 09:03:37 AM, Resultado: 204_Información incompleta: por lo menos un registro de detalle ya existe
+Tuesday 19th of March 2019 09:04:26 AM, se ejecuto hookActionCartSave Successful!!
+Tuesday 19th of March 2019 09:04:26 AM, probando log en hookDisplayHome() en modo Production
+Tuesday 19th of March 2019 09:04:26 AM, Resultado: 204_Información incompleta: por lo menos un registro de detalle ya existe

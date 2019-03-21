@@ -5,6 +5,8 @@ ini_set('soap.wsdl_cache_ttl', 0);
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 // http://localhost:82/modules/wsopenmarket/ws/server.php
+// https://pediasure.farmalisto.com.co/modules/wsopenmarket/ws/server.php?wsdl
+
 
 class Server
 {
@@ -25,7 +27,7 @@ class Server
    'all',
    '',
    array('Token' => array('name' => 'Token', 'type' => 'xsd:string'),
-    'NroPedido' => array('name' => 'NroPedido', 'type' => 'xsd:int'),
+    'NroPedido' => array('name' => 'NroPedido', 'type' => 'xsd:string'),
     'Fecha' => array('name' => 'Fecha', 'type' => 'xsd:string'),
     'Hora' => array('name' => 'Hora', 'type' => 'xsd:string'),
     'Estado' => array('name' => 'Estado', 'type' => 'xsd:string'))

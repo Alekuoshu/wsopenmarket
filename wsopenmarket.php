@@ -388,6 +388,7 @@ class Wsopenmarket extends Module
 
   } else {
     try {
+      Hook::exec('ActionCartSave');
       self::logtxt("probando log en hookDisplayHome() en modo Production");
 
       require_once 'ws/orden_client.php';
@@ -451,22 +452,93 @@ class Wsopenmarket extends Module
 
   self::logtxt("se ejecuto hookActionCartSave Successful!!");
 
-  // $order = new Order((int) $id_order);
+  // cabecera
+  $NroPedido = $params['id_order'];
+  $Documento = $params['id_order'];
+  $customer_firstname = $params['cookie']->__get('customer_firstname');
+  $customer_lastname = $params['cookie']->__get('customer_lastname');
+  $FechaHora = $params['cart']->date_add;
+  // formatear fecha
+  $FechaPedido = substr($FechaHora, 0, 10);
+  $FechaPedido = strtotime($FechaPedido);
+  $FechaPedido = date('d-m-Y', $FechaPedido);
+  // formatear hora
+  $HoraPedido = substr($FechaHora, 11, 19);
+  // obtenemos la direccion y datos del cliente
+  $id_address_delivery = $params['cart']->id_address_delivery;
+  $address = new Address((int) $id_address_delivery);
+  if (Validate::isLoadedObject($address)) {
+    $FullAddress = $address->address1.' - '.$address->address2;
+    $TelefonoDestinatario = $address->phone;
+    $CelularDestinatario = $address->phone_mobile;
+  }else {
+    self::logtxt("Dirección erronea, el objeto no es válido");
+  }
+  // $CodigoDestinatario = $params['cart']->date_add; TODO: buscar como integrar la cedula
+  // $CiudadDestinatario = $params['cart']->date_add; TODO: Configurar los codigos para mostrar depende de la ciudad seleccionada
+  $ValorAsegurado = $params['cart']->getProducts()[0]['total_wt'];
+  // detalle
+  $Documento = $params['id_order'];
+  $OrdenCompra = $params['id_order'];
+  $Consecutivo = $params['id_order']; // TODO: armar el consecutivo
+  $CodigoProducto = $params['cart']->getProducts()[0]['id_product'];
+  $UnidadesSolucitadas = $params['cart']->getProducts()[0]['cart_quantity'];
 
-  $id_order = $params['id_order'];
-  $order = $params['order'];
-  $customer = $params['customer'];
+
 
   $result = array(
-   'id_order' => $id_order,
-   'order' => $order,
-   'customer' => $customer
+   'NroPedido' => $NroPedido,
+   'Documento' => $Documento,
+   'FechaPedido' => $FechaPedido,
+   'HoraPedido' => $HoraPedido,
+   'CodigoDestinatario' => $CodigoDestinatario,
+   'NombreDestinatario' => $customer_firstname.' '.$customer_lastname,
+   'DireccionDestinatario' => $FullAddress,
+   'CiudadDestinatario' => $CiudadDestinatario,
+   'TelefonoDestinatario' => $TelefonoDestinatario,
+   'CelularDestinatario' => $CelularDestinatario,
+   'FechaMinimaEntrega' => $FechaPedido,
+   'FechaMaximaEntrega' => $FechaPedido,
+   'ValorAsegurado' => $ValorAsegurado,
+   'Documento' => $Documento,
+   'OrdenCompra' => $OrdenCompra,
+   'Consecutivo' => $Consecutivo,
+   'CodigoProducto' => $CodigoProducto,
+   'UnidadesSolucitadas' => $UnidadesSolucitadas,
   );
+
+
+  echo "<pre>";
+  var_dump($result);
+  echo "</pre>";
+
+  // echo "<pre>";
+  // var_dump($address);
+  // echo "</pre>";
+
 
   // Hook::exec('actionPaymentConfirmation', array('id_order' => (int) $order->id), null, false, true, false, $order->id_shop);
   // return Hook::exec('ActionCartSave');
 
   // return var_dump($result);
 
+ }
+
+ public function DaneCode($name) {
+    switch ($name) {
+      case 'Medellin':
+        $daneCode = '05001';
+        break;
+      case 'Abejorral':
+        $daneCode = '05002';
+        break;
+      case 'Abejorral':
+        $daneCode = '05002';
+        break;
+      
+      default:
+        $daneCode = '11001';
+        break;
+    }
  }
 }
