@@ -26,6 +26,8 @@ class Wsopenmarket extends Module
  private $WSOPENMARKET_SANDBOX_MODE;
  private $WSOPENMARKET_WS_SANDBOX_URL;
  private $WSOPENMARKET_WS_PRODUCTION_ORDEN_URL;
+ private $WSOPENMARKET_WS_PRODUCTION_USER;
+ private $WSOPENMARKET_WS_PRODUCTION_PASSWORD;
 
  public function __construct()
  {
@@ -53,6 +55,8 @@ class Wsopenmarket extends Module
   $this->WSOPENMARKET_SANDBOX_MODE = Configuration::get('WSOPENMARKET_SANDBOX_MODE');
   $this->WSOPENMARKET_WS_SANDBOX_URL = Configuration::get('WSOPENMARKET_WS_SANDBOX_URL');
   $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL = Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL');
+  $this->WSOPENMARKET_WS_PRODUCTION_USER = Configuration::get('WSOPENMARKET_WS_PRODUCTION_USER');
+  $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD = Configuration::get('WSOPENMARKET_WS_PRODUCTION_PASSWORD');
 
   if ($this->active && Configuration::get('wsopenmarket') == '') {
    $this->warning = $this->l('You have to configure your module');
@@ -108,7 +112,7 @@ class Wsopenmarket extends Module
   $res &= $this->registerHook('backOfficeHeader');
   $res &= $this->registerHook('displayHome');
   $res &= $this->registerHook('ActionPaymentConfirmation');
-  $res &= $this->registerHook('ActionCartSave');
+  $res &= $this->registerHook('displayOrderDetail');
   return $res;
  }
 
@@ -124,7 +128,7 @@ class Wsopenmarket extends Module
   $res &= $this->unRegisterHook('backOfficeHeader');
   $res &= $this->unRegisterHook('displayHome');
   $res &= $this->unRegisterHook('ActionPaymentConfirmation');
-  $res &= $this->unRegisterHook('ActionCartSave');
+  $res &= $this->unRegisterHook('displayOrderDetail');
   return $res;
  }
 
@@ -165,7 +169,9 @@ class Wsopenmarket extends Module
   if (
    Configuration::updateValue('WSOPENMARKET_SANDBOX_MODE', 1) &&
    Configuration::updateValue('WSOPENMARKET_WS_SANDBOX_URL', '') &&
-   Configuration::updateValue('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL', '')
+   Configuration::updateValue('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL', '') &&
+   Configuration::updateValue('WSOPENMARKET_WS_PRODUCTION_USER', '') &&
+   Configuration::updateValue('WSOPENMARKET_WS_PRODUCTION_PASSWORD', '')
   ) {
    return true;
   } else {
@@ -185,7 +191,9 @@ class Wsopenmarket extends Module
   if (
    Configuration::deleteByName('WSOPENMARKET_SANDBOX_MODE') &&
    Configuration::deleteByName('WSOPENMARKET_WS_SANDBOX_URL') &&
-   Configuration::deleteByName('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL')
+   Configuration::deleteByName('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL') &&
+   Configuration::deleteByName('WSOPENMARKET_WS_PRODUCTION_USER') &&
+   Configuration::deleteByName('WSOPENMARKET_WS_PRODUCTION_PASSWORD')
   ) {
    return true;
   } else {
@@ -237,7 +245,7 @@ class Wsopenmarket extends Module
    'id_language' => $this->context->language->id,
   );
 
-  return $helper->generateForm(array($this->getConfigForm()));
+  return $helper->generateForm(array($this->getConfigForm(), $this->getCredentialsForm()));
  }
 
  /**
@@ -246,6 +254,7 @@ class Wsopenmarket extends Module
  protected function getConfigForm()
  {
   return array(
+    // Settings
    'form' => array(
     'legend' => array(
      'title' => $this->l('Settings'),
@@ -295,6 +304,39 @@ class Wsopenmarket extends Module
    ),
   );
  }
+ protected function getCredentialsForm()
+ {
+  return array(
+    // Credentials
+   'form' => array(
+    'legend' => array(
+     'title' => $this->l('Credentials'),
+     'icon' => 'icon-key',
+    ),
+    'input' => array(
+     array(
+      'col' => 3,
+      'type' => 'text',
+      'prefix' => '<i class="icon icon-user"></i>',
+      'desc' => $this->l('Enter a user'),
+      'name' => 'WSOPENMARKET_WS_PRODUCTION_USER',
+      'label' => $this->l('User'),
+     ),
+     array(
+      'col' => 3,
+      'type' => 'text',
+      'prefix' => '<i class="icon icon-key"></i>',
+      'desc' => $this->l('Enter a password'),
+      'name' => 'WSOPENMARKET_WS_PRODUCTION_PASSWORD',
+      'label' => $this->l('Password'),
+     ),
+    ),
+    'submit' => array(
+     'title' => $this->l('Save'),
+    ),
+   ),
+  );
+ }
 
  /**
   * Set values for the inputs.
@@ -306,6 +348,8 @@ class Wsopenmarket extends Module
    'WSOPENMARKET_SANDBOX_MODE' => (int) Configuration::get('WSOPENMARKET_SANDBOX_MODE'),
    'WSOPENMARKET_WS_SANDBOX_URL' => Configuration::get('WSOPENMARKET_WS_SANDBOX_URL'),
    'WSOPENMARKET_WS_PRODUCTION_ORDEN_URL' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL'),
+   'WSOPENMARKET_WS_PRODUCTION_USER' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_USER'),
+   'WSOPENMARKET_WS_PRODUCTION_PASSWORD' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_PASSWORD'),
   );
  }
 
@@ -319,6 +363,7 @@ class Wsopenmarket extends Module
   foreach (array_keys($form_values) as $key) {
    Configuration::updateValue($key, Tools::getValue($key));
   }
+
  }
 
  /**
@@ -388,13 +433,49 @@ class Wsopenmarket extends Module
 
   } else {
     try {
-      Hook::exec('ActionCartSave');
+      // Hook::exec('ActionCartSave');
       self::logtxt("probando log en hookDisplayHome() en modo Production");
 
       require_once 'ws/orden_client.php';
 
+      // add input params
+      $DESPACHOS = array();
+      $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+      $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+      // cabecera
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '406'; // id orden
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '406'; // id orden
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '406'; // id orden
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '27/03/2019';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '27/03/2019'; //fecha del pedido
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '27/03/2019'; // fecha del pedido
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 7500;
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+      // Detalle
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '406';
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '406';
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD200';
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 1;
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+
       $wsOrden = new Orden();
-      $orden = $wsOrden->getDataOrden();
+      $orden = $wsOrden->getDataOrden($DESPACHOS);
 
       // set to smarty template values
       $this->context->smarty->assign('orden', $orden);
@@ -417,115 +498,102 @@ class Wsopenmarket extends Module
 
   self::logtxt("se ejecuto ActionPaymentConfirmation Successful!!");
 
-  // $order = new Order((int) $id_order);
-
-  $id_order = $params['id_order'];
-  $order = $params['order'];
-  $customer = $params['customer'];
-
-  $result = array(
-   'id_order' => $id_order,
-   'order' => $order,
-   'customer' => $customer
-  );
-
-  // Hook::exec('actionPaymentConfirmation', array('id_order' => (int) $order->id), null, false, true, false, $order->id_shop);
-  // Hook::exec('ActionPaymentConfirmation');
-
-  // return var_dump($result);
-
-
-  // $oOrder = new Order($aParams['id_order']);
-
-    // if ($aParams['newOrderStatus']->id == Configuration::get('PS_OS_PAYMENT')) {
-    //     $oOrder->setCurrentState(Configuration::get('XXXXXX_STATUS_WAITING'));
-    //     $oOrder->save();
-    // }
-
 
  }
 
+// actionValidateOrder
+// displayOrderConfirmation
+// displayOrderDetail
 
- // hook para testear los productos del carrito
- public function hookActionCartSave($params)
+ // hook para testear in order details
+ public function hookdisplayOrderDetail($params)
  {
+    self::logtxt("se ejecuto hookActionCartSave Successful!!");
 
-  self::logtxt("se ejecuto hookActionCartSave Successful!!");
+  if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
+    try {
 
-  // cabecera
-  $NroPedido = $params['id_order'];
-  $Documento = $params['id_order'];
-  $customer_firstname = $params['cookie']->__get('customer_firstname');
-  $customer_lastname = $params['cookie']->__get('customer_lastname');
-  $FechaHora = $params['cart']->date_add;
-  // formatear fecha
-  $FechaPedido = substr($FechaHora, 0, 10);
-  $FechaPedido = strtotime($FechaPedido);
-  $FechaPedido = date('d-m-Y', $FechaPedido);
-  // formatear hora
-  $HoraPedido = substr($FechaHora, 11, 19);
-  // obtenemos la direccion y datos del cliente
-  $id_address_delivery = $params['cart']->id_address_delivery;
-  $address = new Address((int) $id_address_delivery);
-  if (Validate::isLoadedObject($address)) {
-    $FullAddress = $address->address1.' - '.$address->address2;
-    $TelefonoDestinatario = $address->phone;
-    $CelularDestinatario = $address->phone_mobile;
-  }else {
-    self::logtxt("Dirección erronea, el objeto no es válido");
-  }
-  // $CodigoDestinatario = $params['cart']->date_add; TODO: buscar como integrar la cedula
-  // $CiudadDestinatario = $params['cart']->date_add; TODO: Configurar los codigos para mostrar depende de la ciudad seleccionada
-  $ValorAsegurado = $params['cart']->getProducts()[0]['total_wt'];
-  // detalle
-  $Documento = $params['id_order'];
-  $OrdenCompra = $params['id_order'];
-  $Consecutivo = $params['id_order']; // TODO: armar el consecutivo
-  $CodigoProducto = $params['cart']->getProducts()[0]['id_product'];
-  $UnidadesSolucitadas = $params['cart']->getProducts()[0]['cart_quantity'];
+      // echo "<pre>";
+      // var_dump($params);
+      // echo "</pre>";
 
+      // cabecera
+      $NroPedido = $params['order']->id;
+      $Documento = $params['order']->id;
+      $customer_firstname = $params['cookie']->__get('customer_firstname');
+      $customer_lastname = $params['cookie']->__get('customer_lastname');
+      $FechaHora = $params['order']->date_add;
+      // formatear fecha
+      $FechaPedido = substr($FechaHora, 0, 10);
+      $FechaPedido = strtotime($FechaPedido);
+      $FechaPedido = date('d-m-Y', $FechaPedido);
+      // formatear hora
+      $HoraPedido = substr($FechaHora, 11, 19);
+      // obtenemos la direccion y datos del cliente
+      $id_address_delivery = $params['order']->id_address_delivery;
+      $address = new Address((int) $id_address_delivery);
+      if (Validate::isLoadedObject($address)) {
+          $FullAddress = $address->address1.' - '.$address->address2;
+          $TelefonoDestinatario = $address->phone;
+          $CelularDestinatario = $address->phone_mobile;
+      } else {
+          self::logtxt("Dirección erronea, el objeto no es válido");
+      }
+      $CodigoDestinatario = $params['order']->id; //TODO: buscar como integrar la cedula
+      $CiudadDestinatario = Wsopenmarket::DaneCode('Medellin'); //configurar codigos danes
+      // $ValorAsegurado = $params['order']->getProducts()[0]['total_wt'];
+      $ValorAsegurado = round($params['order']->total_paid, 2);
 
+      // detalle
+      $cart = new CartCore($params['order']->id_cart);
+      $products = $cart->getProducts();
 
-  $result = array(
-   'NroPedido' => $NroPedido,
-   'Documento' => $Documento,
-   'FechaPedido' => $FechaPedido,
-   'HoraPedido' => $HoraPedido,
-   'CodigoDestinatario' => $CodigoDestinatario,
-   'NombreDestinatario' => $customer_firstname.' '.$customer_lastname,
-   'DireccionDestinatario' => $FullAddress,
-   'CiudadDestinatario' => $CiudadDestinatario,
-   'TelefonoDestinatario' => $TelefonoDestinatario,
-   'CelularDestinatario' => $CelularDestinatario,
-   'FechaMinimaEntrega' => $FechaPedido,
-   'FechaMaximaEntrega' => $FechaPedido,
-   'ValorAsegurado' => $ValorAsegurado,
-   'Documento' => $Documento,
-   'OrdenCompra' => $OrdenCompra,
-   'Consecutivo' => $Consecutivo,
-   'CodigoProducto' => $CodigoProducto,
-   'UnidadesSolucitadas' => $UnidadesSolucitadas,
-  );
+      $OrdenCompra = $params['order']->id;
+      $number_products = count($products); // para saber cuantas veces se va a enviar el xml
+      $Consecutivo = (int)($products[0]); 
+      $CodigoProducto = $products[0]['reference'];
+      $UnidadesSolucitadas = $products[0]['quantity'];
 
 
-  echo "<pre>";
-  var_dump($result);
-  echo "</pre>";
+      $result = array(
+        'Documento' => $Documento,
+        'OrdenCompra' => $OrdenCompra,
+        'NroPedido' => $NroPedido,
+        'FechaPedido' => $FechaPedido,
+        'HoraPedido' => $HoraPedido,
+        'CodigoDestinatario' => $CodigoDestinatario,
+        'NombreDestinatario' => $customer_firstname.' '.$customer_lastname,
+        'DireccionDestinatario' => $FullAddress,
+        'CiudadDestinatario' => $CiudadDestinatario,
+        'TelefonoDestinatario' => $TelefonoDestinatario,
+        'CelularDestinatario' => $CelularDestinatario,
+        'FechaMinimaEntrega' => $FechaPedido,
+        'FechaMaximaEntrega' => $FechaPedido,
+        'ValorAsegurado' => $ValorAsegurado,
+        'Consecutivo' => $Consecutivo,
+        'CodigoProducto' => $CodigoProducto,
+        'UnidadesSolucitadas' => $UnidadesSolucitadas,
+        'number_products' => $number_products,
+      );
 
-  // echo "<pre>";
-  // var_dump($address);
-  // echo "</pre>";
 
+      echo "<pre>";
+      var_dump($result);
+      echo "</pre>";
 
-  // Hook::exec('actionPaymentConfirmation', array('id_order' => (int) $order->id), null, false, true, false, $order->id_shop);
-  // return Hook::exec('ActionCartSave');
-
-  // return var_dump($result);
+      // echo "<pre>";
+      // var_dump($address);
+      // echo "</pre>";
+    } catch (Exception $e) {
+        $this->setErrorMessage("Exeptions on hookActionCartSave: " . $e->getMessage());
+        self::logtxt("Exeptions on hookActionCartSave: " . $e->getMessage());
+    }
+  } // end production
 
  }
 
- public function DaneCode($name) {
-    switch ($name) {
+ public function DaneCode($ciudad) {
+    switch ($ciudad) {
       case 'Medellin':
         $daneCode = '05001';
         break;
@@ -540,5 +608,6 @@ class Wsopenmarket extends Module
         $daneCode = '11001';
         break;
     }
+    return $daneCode;
  }
 }

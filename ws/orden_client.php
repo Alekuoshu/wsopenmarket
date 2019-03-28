@@ -29,6 +29,9 @@ class Orden
   $this->WSOPENMARKET_SANDBOX_MODE = Configuration::get('WSOPENMARKET_SANDBOX_MODE');
   $this->WSOPENMARKET_WS_SANDBOX_URL = Configuration::get('WSOPENMARKET_WS_SANDBOX_URL');
   $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL = Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL');
+  $this->WSOPENMARKET_WS_PRODUCTION_USER = Configuration::get('WSOPENMARKET_WS_PRODUCTION_USER');
+  $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD = Configuration::get('WSOPENMARKET_WS_PRODUCTION_PASSWORD');
+
 
   require_once _PS_MODULE_DIR_ . 'wsopenmarket/lib/nusoap-0.9.5/lib/nusoap.php';
 
@@ -91,7 +94,7 @@ class Orden
   *
   * @return string
   */
- public function getDataOrden()
+ public function getDataOrden($DESPACHOS = array())
  {
   $err = $this->_soapClient->getError();
   if ($err) {
@@ -99,43 +102,6 @@ class Orden
    echo '<h2>Debug</h2><pre>' . htmlspecialchars($this->_soapClient->getDebug(), ENT_QUOTES) . '</pre>';
    exit();
   }
-
-// add input params
-$DESPACHOS = array();
-$DESPACHOS['Usuario'] = 'WSABBOTT';
-$DESPACHOS['Clave'] = 'WS.2019.ABBOTT';
-// cabecera
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '404'; // id orden
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '404'; // id orden
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '404'; // id orden
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '11/03/2019';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '11/03/2019'; //fecha del pedido
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '11/03/2019'; // fecha del pedido
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 4500;
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
-$DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
-// Detalle
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '404';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '404';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD107';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = '';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 2;
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = '';
-$DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N';
-
 
   // get data
   try {

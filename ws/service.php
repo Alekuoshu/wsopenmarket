@@ -163,8 +163,8 @@ class Service
 
             //   $pconfirmation = json_encode($pconfirmation, true);
             return array(
-            'Estado' => utf8_decode($pconfirmation),
-        );
+                'Estado' => utf8_decode($pconfirmation),
+            );
         } else {
             return array(
             'Estado' => utf8_decode('Acceso denegado, token inválido!!'),
