@@ -127,7 +127,7 @@ class Orden
   }
 
   return $this->orden;
-  exit();
+  // exit();
  }
 
 }

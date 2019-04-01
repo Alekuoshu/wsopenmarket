@@ -436,52 +436,52 @@ class Wsopenmarket extends Module
       // Hook::exec('ActionCartSave');
       self::logtxt("probando log en hookDisplayHome() en modo Production");
 
-      require_once 'ws/orden_client.php';
+      // require_once 'ws/orden_client.php';
 
-      // add input params
-      $DESPACHOS = array();
-      $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
-      $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
-      // cabecera
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '406'; // id orden
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '406'; // id orden
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '406'; // id orden
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '27/03/2019';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '27/03/2019'; //fecha del pedido
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '27/03/2019'; // fecha del pedido
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 7500;
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
-      $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
-      // Detalle
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '406';
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '406';
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD200';
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 1;
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
-      $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+      // // add input params
+      // $DESPACHOS = array();
+      // $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+      // $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+      // // cabecera
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '406'; // id orden
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '406'; // id orden
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '406'; // id orden
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '27/03/2019';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '27/03/2019'; //fecha del pedido
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '27/03/2019'; // fecha del pedido
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 7500;
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+      // // Detalle
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '406';
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '406';
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD200';
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 1;
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
 
-      $wsOrden = new Orden();
-      $orden = $wsOrden->getDataOrden($DESPACHOS);
+      // $wsOrden = new Orden();
+      // $orden = $wsOrden->getDataOrden($DESPACHOS);
 
-      // set to smarty template values
-      $this->context->smarty->assign('orden', $orden);
-      self::logtxt("Resultado: $orden");
+      // // set to smarty template values
+      // $this->context->smarty->assign('orden', $orden);
+      // self::logtxt("Resultado: $orden");
 
-      return $this->display(__FILE__, 'wsopenmarketMessage.tpl');
+      // return $this->display(__FILE__, 'wsopenmarketMessage.tpl');
 
     } catch (Exception $e) {
         $this->setErrorMessage("Exeptions on hookDisplayHome: " . $e->getMessage());
@@ -501,21 +501,17 @@ class Wsopenmarket extends Module
 
  }
 
-// actionValidateOrder
-// displayOrderConfirmation
-// displayOrderDetail
-
  // hook para testear in order details
  public function hookdisplayOrderDetail($params)
  {
-    self::logtxt("se ejecuto hookActionCartSave Successful!!");
+    self::logtxt("se ejecuto hookdisplayOrderDetail Successful!!");
 
   if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
     try {
 
-      // echo "<pre>";
-      // var_dump($params);
-      // echo "</pre>";
+      $cart = new CartCore($params['order']->id_cart);
+      $products = $cart->getProducts();
+      $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
 
       // cabecera
       $NroPedido = $params['order']->id;
@@ -536,78 +532,110 @@ class Wsopenmarket extends Module
           $FullAddress = $address->address1.' - '.$address->address2;
           $TelefonoDestinatario = $address->phone;
           $CelularDestinatario = $address->phone_mobile;
+          $CiudadDes = $address->city;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
       $CodigoDestinatario = $params['order']->id; //TODO: buscar como integrar la cedula
-      $CiudadDestinatario = Wsopenmarket::DaneCode('Medellin'); //configurar codigos danes
-      // $ValorAsegurado = $params['order']->getProducts()[0]['total_wt'];
       $ValorAsegurado = round($params['order']->total_paid, 2);
 
+      // obtenemos el codigo dane segun la ciudad del destinatario
+      setlocale(LC_ALL, 'en_US.UTF8');
+      $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
+      $Ciudad = mb_strtoupper($CiudadDes);
+      $CiudadDestinatario = Wsopenmarket::DaneCode($Ciudad);
+
       // detalle
-      $cart = new CartCore($params['order']->id_cart);
-      $products = $cart->getProducts();
-
       $OrdenCompra = $params['order']->id;
-      $number_products = count($products); // para saber cuantas veces se va a enviar el xml
-      $Consecutivo = (int)($products[0]); 
-      $CodigoProducto = $products[0]['reference'];
-      $UnidadesSolucitadas = $products[0]['quantity'];
 
+      // Armando el xml de envio:
+      require_once 'ws/orden_client.php';
 
-      $result = array(
-        'Documento' => $Documento,
-        'OrdenCompra' => $OrdenCompra,
-        'NroPedido' => $NroPedido,
-        'FechaPedido' => $FechaPedido,
-        'HoraPedido' => $HoraPedido,
-        'CodigoDestinatario' => $CodigoDestinatario,
-        'NombreDestinatario' => $customer_firstname.' '.$customer_lastname,
-        'DireccionDestinatario' => $FullAddress,
-        'CiudadDestinatario' => $CiudadDestinatario,
-        'TelefonoDestinatario' => $TelefonoDestinatario,
-        'CelularDestinatario' => $CelularDestinatario,
-        'FechaMinimaEntrega' => $FechaPedido,
-        'FechaMaximaEntrega' => $FechaPedido,
-        'ValorAsegurado' => $ValorAsegurado,
-        'Consecutivo' => $Consecutivo,
-        'CodigoProducto' => $CodigoProducto,
-        'UnidadesSolucitadas' => $UnidadesSolucitadas,
-        'number_products' => $number_products,
-      );
+      // iteramos el pedido
+      foreach ($products as $key => $product) {
+        
+        $Consecutivo = ($key+1);
+        $CodigoProducto = $product['reference'];
+        $UnidadesSolucitadas = $product['quantity'];
 
+        // add input params
+        $DESPACHOS = array();
+        $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+        $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+        // cabecera
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = $Documento; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = $OrdenCompra; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = $NroPedido; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = $FechaPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = $HoraPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = $customer_firstname.' '.$customer_lastname;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = $FullAddress;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = $CiudadDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+        // Detalle
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = $Consecutivo;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = $CodigoProducto;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = $UnidadesSolucitadas;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
 
-      echo "<pre>";
-      var_dump($result);
-      echo "</pre>";
+        self::logtxt("Consecutivo: $Consecutivo");
+
+        $wsOrden = new Orden();
+        $orden = $wsOrden->getDataOrden($DESPACHOS);
+
+        // set to smarty template values
+        $this->context->smarty->assign('orden', $orden);
+        self::logtxt("Resultado: $orden");
+
+        // return $this->display(__FILE__, 'wsopenmarketMessage.tpl'); // only for testing
 
       // echo "<pre>";
-      // var_dump($address);
+      // var_dump($DESPACHOS);
       // echo "</pre>";
+
+
+
+      } //end foreach
+        
+
     } catch (Exception $e) {
-        $this->setErrorMessage("Exeptions on hookActionCartSave: " . $e->getMessage());
-        self::logtxt("Exeptions on hookActionCartSave: " . $e->getMessage());
+        $this->setErrorMessage("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
+        self::logtxt("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
     }
   } // end production
 
- }
+ }              
 
+//  funcion para obtener el codigo dane desde un archivo json
  public function DaneCode($ciudad) {
-    switch ($ciudad) {
-      case 'Medellin':
-        $daneCode = '05001';
-        break;
-      case 'Abejorral':
-        $daneCode = '05002';
-        break;
-      case 'Abejorral':
-        $daneCode = '05002';
-        break;
-      
-      default:
-        $daneCode = '11001';
-        break;
-    }
-    return $daneCode;
- }
+   $CodeDanedata = file_get_contents(_PS_BASE_URL_.'/modules/wsopenmarket/lib/codigosdane.json');
+      $codigosDane = json_decode($CodeDanedata, true);
+
+      foreach ($codigosDane as $codigoDane) {
+        $Ciudad = $codigoDane['ciudad'];
+        if($Ciudad == $ciudad) {
+          $daneCode = $codigoDane['codigo'];
+        }
+      }
+      // self::logtxt($daneCode);
+      return $daneCode;
+
+  }
+
 }
