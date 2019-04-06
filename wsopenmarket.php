@@ -493,32 +493,44 @@ class Wsopenmarket extends Module
  }
 
  // hook para atajar los valores del pedido despues del pago del mismo
+//  products:
+//  product_reference
+//  id_product
+//  date_add
+// product_quantity
+
+// orders:
+// id_address_delivery
+// id_cart
+// total_paid
+// total_paid_real
+// date_add
+
  public function hookActionPaymentConfirmation($params)
  {
 
   self::logtxt("se ejecuto ActionPaymentConfirmation Successful!!");
 
-
- }
-
- // hook para testear in order details
- public function hookdisplayOrderDetail($params)
- {
-    self::logtxt("se ejecuto hookdisplayOrderDetail Successful!!");
-
   if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
     try {
 
-      $cart = new CartCore($params['order']->id_cart);
+      
+      $id_order = $params['id_order'];
+      $order = new OrderCore($id_order);
+      $cart = new CartCore($order->id_cart);
       $products = $cart->getProducts();
       $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
+      self::logtxt("numero de productos: $number_products");
 
       // cabecera
-      $NroPedido = $params['order']->id;
-      $Documento = $params['order']->id;
-      $customer_firstname = $params['cookie']->__get('customer_firstname');
-      $customer_lastname = $params['cookie']->__get('customer_lastname');
-      $FechaHora = $params['order']->date_add;
+      $NroPedido = $id_order;
+      $Documento = $id_order;
+      $customer_firstname = $order['cookie']->__get('customer_firstname');
+      $customer_lastname = $order['cookie']->__get('customer_lastname');
+      self::logtxt("Cliente: $customer_firstname.' '.$customer_lastname");
+      
+      $FechaHora = $order->date_add;
+      self::logtxt("Fecha: $FechaHora");
       // formatear fecha
       $FechaPedido = substr($FechaHora, 0, 10);
       $FechaPedido = strtotime($FechaPedido);
@@ -526,7 +538,7 @@ class Wsopenmarket extends Module
       // formatear hora
       $HoraPedido = substr($FechaHora, 11, 19);
       // obtenemos la direccion y datos del cliente
-      $id_address_delivery = $params['order']->id_address_delivery;
+      $id_address_delivery = $order->id_address_delivery;
       $address = new Address((int) $id_address_delivery);
       if (Validate::isLoadedObject($address)) {
           $FullAddress = $address->address1.' - '.$address->address2;
@@ -536,8 +548,8 @@ class Wsopenmarket extends Module
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
-      $CodigoDestinatario = $params['order']->id; //TODO: buscar como integrar la cedula
-      $ValorAsegurado = round($params['order']->total_paid, 2);
+      $CodigoDestinatario = $id_order; //TODO: buscar como integrar la cedula
+      $ValorAsegurado = round($order->total_paid, 2);
 
       // obtenemos el codigo dane segun la ciudad del destinatario
       setlocale(LC_ALL, 'en_US.UTF8');
@@ -546,7 +558,7 @@ class Wsopenmarket extends Module
       $CiudadDestinatario = Wsopenmarket::DaneCode($Ciudad);
 
       // detalle
-      $OrdenCompra = $params['order']->id;
+      $OrdenCompra = $id_order;
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
@@ -555,8 +567,8 @@ class Wsopenmarket extends Module
       foreach ($products as $key => $product) {
         
         $Consecutivo = ($key+1);
-        $CodigoProducto = $product['reference'];
-        $UnidadesSolucitadas = $product['quantity'];
+        $CodigoProducto = $product['product_reference'];
+        $UnidadesSolucitadas = $product['product_quantity'];
 
         // add input params
         $DESPACHOS = array();
@@ -596,18 +608,20 @@ class Wsopenmarket extends Module
 
         self::logtxt("Consecutivo: $Consecutivo");
 
-        $wsOrden = new Orden();
-        $orden = $wsOrden->getDataOrden($DESPACHOS);
+        // $wsOrden = new Orden();
+        // $orden = $wsOrden->getDataOrden($DESPACHOS);
 
-        // set to smarty template values
-        $this->context->smarty->assign('orden', $orden);
-        self::logtxt("Resultado: $orden");
+        // // set to smarty template values
+        // $this->context->smarty->assign('orden', $orden);
+        // self::logtxt("Resultado: $orden");
 
         // return $this->display(__FILE__, 'wsopenmarketMessage.tpl'); // only for testing
+        
+      // self::logtxt(var_dump($DESPACHOS));
+      echo "<pre>";
+      var_dump($DESPACHOS);
+      echo "</pre>";
 
-      // echo "<pre>";
-      // var_dump($DESPACHOS);
-      // echo "</pre>";
 
 
 
@@ -619,6 +633,128 @@ class Wsopenmarket extends Module
         self::logtxt("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
     }
   } // end production
+
+
+ }
+
+ // hook para testear in order details
+ public function hookdisplayOrderDetail($params)
+ {
+    // self::logtxt("se ejecuto hookdisplayOrderDetail Successful!!");
+
+  // if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
+  //   try {
+
+  //     $cart = new CartCore($params['order']->id_cart);
+  //     $products = $cart->getProducts();
+  //     $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
+
+  //     // cabecera
+  //     $NroPedido = $params['order']->id;
+  //     $Documento = $params['order']->id;
+  //     $customer_firstname = $params['cookie']->__get('customer_firstname');
+  //     $customer_lastname = $params['cookie']->__get('customer_lastname');
+  //     $FechaHora = $params['order']->date_add;
+  //     // formatear fecha
+  //     $FechaPedido = substr($FechaHora, 0, 10);
+  //     $FechaPedido = strtotime($FechaPedido);
+  //     $FechaPedido = date('d-m-Y', $FechaPedido);
+  //     // formatear hora
+  //     $HoraPedido = substr($FechaHora, 11, 19);
+  //     // obtenemos la direccion y datos del cliente
+  //     $id_address_delivery = $params['order']->id_address_delivery;
+  //     $address = new Address((int) $id_address_delivery);
+  //     if (Validate::isLoadedObject($address)) {
+  //         $FullAddress = $address->address1.' - '.$address->address2;
+  //         $TelefonoDestinatario = $address->phone;
+  //         $CelularDestinatario = $address->phone_mobile;
+  //         $CiudadDes = $address->city;
+  //     } else {
+  //         self::logtxt("Dirección erronea, el objeto no es válido");
+  //     }
+  //     $CodigoDestinatario = $params['order']->id; //TODO: buscar como integrar la cedula
+  //     $ValorAsegurado = round($params['order']->total_paid, 2);
+
+  //     // obtenemos el codigo dane segun la ciudad del destinatario
+  //     setlocale(LC_ALL, 'en_US.UTF8');
+  //     $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
+  //     $Ciudad = mb_strtoupper($CiudadDes);
+  //     $CiudadDestinatario = Wsopenmarket::DaneCode($Ciudad);
+
+  //     // detalle
+  //     $OrdenCompra = $params['order']->id;
+
+  //     // Armando el xml de envio:
+  //     require_once 'ws/orden_client.php';
+
+  //     // iteramos el pedido
+  //     foreach ($products as $key => $product) {
+        
+  //       $Consecutivo = ($key+1);
+  //       $CodigoProducto = $product['reference'];
+  //       $UnidadesSolucitadas = $product['quantity'];
+
+  //       // add input params
+  //       $DESPACHOS = array();
+  //       $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+  //       $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+  //       // cabecera
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = $Documento; // id orden
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = $OrdenCompra; // id orden
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = $NroPedido; // id orden
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = $FechaPedido;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = $HoraPedido;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = $customer_firstname.' '.$customer_lastname;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = $FullAddress;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = $CiudadDestinatario;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+  //       $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+  //       // Detalle
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = $Consecutivo;
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = $CodigoProducto;
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = $UnidadesSolucitadas;
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+  //       $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+
+  //       self::logtxt("Consecutivo: $Consecutivo");
+
+  //       $wsOrden = new Orden();
+  //       $orden = $wsOrden->getDataOrden($DESPACHOS);
+
+  //       // set to smarty template values
+  //       $this->context->smarty->assign('orden', $orden);
+  //       self::logtxt("Resultado: $orden");
+
+  //       // return $this->display(__FILE__, 'wsopenmarketMessage.tpl'); // only for testing
+
+  //     // echo "<pre>";
+  //     // var_dump($DESPACHOS);
+  //     // echo "</pre>";
+
+
+
+  //     } //end foreach
+        
+
+  //   } catch (Exception $e) {
+  //       $this->setErrorMessage("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
+  //       self::logtxt("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
+  //   }
+  // } // end production
 
  }              
 
