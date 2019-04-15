@@ -5,7 +5,7 @@ ini_set('soap.wsdl_cache_ttl', 0);
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 // http://localhost:82/modules/wsopenmarket/ws/server.php
-// https://pediasure.farmalisto.com.co/modules/wsopenmarket/ws/server.php?wsdl
+// https://qapediasure.farmalisto.com.co/modules/wsopenmarket/ws/server.php?wsdl
 
 
 class Server

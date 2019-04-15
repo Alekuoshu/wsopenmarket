@@ -63,11 +63,11 @@ class Service
 
             // db id order states:
             // 3 (003) - Preparación en curso
-            // 32 (004) – Empacado
+            // 14 (004) – Empacado
             // 4 (005) – Enviado
             // 5 (006) – Entregado
-            // 33 (007) – Devuelto
-            // 34 (008) – Rechazado
+            // 15 (007) – Devuelto
+            // 16 (008) – Rechazado
 
             // TODO: Validar por tienda y numero de pedido hagan match
 
@@ -89,7 +89,7 @@ class Service
                 break;
             case '004':
                 $pconfirmation = '200 - Empacado';
-                $new_order_state = 32;
+                $new_order_state = 14;
                 $state = true;
                 break;
             case '005':
@@ -104,12 +104,12 @@ class Service
                 break;
             case '007':
                 $pconfirmation = '200 - Devuelto';
-                $new_order_state = 33;
+                $new_order_state = 15;
                 $state = true;
                 break;
             case '008':
                 $pconfirmation = '200 - Rechazado';
-                $new_order_state = 34;
+                $new_order_state = 16;
                 $state = true;
                 break;
 
