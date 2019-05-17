@@ -149,16 +149,18 @@ class Service
                     throw new PrestaShopException('No se ha podido cargar el estado de la orden');
                 }
 
-                $history = new OrderHistory();
-                $history->id_order = (int) $order->id;
-                $history->id_employee = 9;
-                $history->id_order_state = $new_order_state;
-                if ($history->save()) {
-                    $history->changeIdOrderState($new_order_state, $order);
-                    $module::logtxt('Estado de la orden '.$inPicking['NroPedido'].' actualizada a: ' . $new_order_state);
-                } else {
-                    $module::logtxt('Error al completar la actualización del estado de la orden: ' . $inPicking['NroPedido']);
+                if ((int) $order->getCurrentState() != (int)$new_order_state) {
+                    try {
+                        $order->setCurrentState($new_order_state, 9);
+                        $module::logtxt('Estado de la orden '.$inPicking['NroPedido'].' actualizada a: ' . $new_order_state);
+                    } catch (Exception $e) {
+                        $module::logtxt('Error al completar la actualización del estado de la orden: ' . $inPicking['NroPedido'].', Mensaje: '.$e->getMessage());
+                        $pconfirmation = '500 - Error al cambiar el estado de la orden';
+                    }
+                }else {
+                    $module::logtxt('La orden ' . $inPicking['NroPedido'].' ya tiene el estado numero: '.$new_order_state);
                 }
+
             }
 
             //   $pconfirmation = json_encode($pconfirmation, true);
