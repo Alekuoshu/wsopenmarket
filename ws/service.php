@@ -151,7 +151,7 @@ class Service
 
                 $history = new OrderHistory();
                 $history->id_order = (int) $order->id;
-                $history->id_employee = 0;
+                $history->id_employee = 9;
                 $history->id_order_state = $new_order_state;
                 if ($history->save()) {
                     $history->changeIdOrderState($new_order_state, $order);

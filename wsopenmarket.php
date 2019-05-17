@@ -12,8 +12,8 @@
 //  http://www.mauricioalpizar.com/ejemplos/nusoap/mi_ws1.php?wsdl
 
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 if (!defined('_PS_VERSION_')) {
  exit;
@@ -502,11 +502,17 @@ class Wsopenmarket extends Module
       
       $id_order = $params['id_order'];
       $order = new OrderCore($id_order);
+      // consultar customer email DB/////
+      $db = Db::getInstance();
+      $sql = 'SELECT email FROM '._DB_PREFIX_.'customer WHERE id_customer = '.$order->id_customer;
+      $customerEmail = $db->getValue($sql);
+      ///////////////////////////////////////////
+
       $cart = new CartCore($order->id_cart);
       $products = $cart->getProducts();
       $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
       $customers = new CustomerCore();
-      $customer = $customers->getCustomersByEmail($params['cookie']->__get('email'));
+      $customer = $customers->getCustomersByEmail($customerEmail);
 
       // self::logtxt("numero de productos: $number_products");
 
@@ -515,6 +521,7 @@ class Wsopenmarket extends Module
       $Documento = $id_order;
       $customer_firstname = $customer[0]['firstname'];
       $customer_lastname = $customer[0]['lastname'];
+      self::logtxt("$customer_firstname $customer_lastname"); //testing
       
       $FechaHora = $order->date_add;
       // formatear fecha
@@ -598,7 +605,7 @@ class Wsopenmarket extends Module
         $orden = $wsOrden->getDataOrden($DESPACHOS);
 
         // set to smarty template values
-        $this->context->smarty->assign('orden', $orden);
+        // $this->context->smarty->assign('orden', $orden);
         self::logtxt("Resultado: $orden");
 
         // return $this->display(__FILE__, 'wsopenmarketMessage.tpl'); // only for testing
