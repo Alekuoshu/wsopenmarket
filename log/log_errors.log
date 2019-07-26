@@ -1,0 +1,182 @@
+Thursday 2nd of May 2019 07:36:46 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 2nd of May 2019 07:36:46 PM, Maria Mantilla
+Thursday 2nd of May 2019 07:36:46 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 2nd of May 2019 07:36:57 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 2nd of May 2019 07:36:57 PM, Maria Mantilla
+Thursday 2nd of May 2019 07:36:58 PM, Resultado: 204_Información incompleta: por lo menos un registro de detalle ya existe
+Thursday 2nd of May 2019 08:15:09 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"96","Fecha":"02-05-2019","Hora":"19:39:48","Estado":"003"}
+Thursday 2nd of May 2019 08:15:09 PM, Estado de la orden 96 actualizada a: 3
+Thursday 2nd of May 2019 08:17:35 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"96","Fecha":"02-05-2019","Hora":"20:16:44","Estado":"004"}
+Thursday 2nd of May 2019 08:17:35 PM, Estado de la orden 96 actualizada a: 14
+Thursday 2nd of May 2019 08:24:51 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 2nd of May 2019 08:24:51 PM, Luisa Villaneda
+Thursday 2nd of May 2019 08:24:51 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 2nd of May 2019 08:30:10 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"02-05-2019","Hora":"20:27:48","Estado":"003"}
+Thursday 2nd of May 2019 08:30:10 PM, Estado de la orden 100 actualizada a: 3
+Thursday 2nd of May 2019 08:31:31 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"02-05-2019","Hora":"20:27:48","Estado":"003"}
+Thursday 2nd of May 2019 08:31:31 PM, Estado de la orden 100 actualizada a: 3
+Thursday 2nd of May 2019 08:31:31 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"96","Fecha":"02-05-2019","Hora":"19:39:48","Estado":"003"}
+Thursday 2nd of May 2019 08:31:31 PM, Estado de la orden 96 actualizada a: 3
+Friday 3rd of May 2019 01:15:09 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"96","Fecha":"03-05-2019","Hora":"13:10:59","Estado":"005"}
+Friday 3rd of May 2019 01:15:09 PM, Estado de la orden 96 actualizada a: 4
+Friday 3rd of May 2019 01:55:09 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"96","Fecha":"03-05-2019","Hora":"13:55:05","Estado":"006"}
+Friday 3rd of May 2019 01:55:09 PM, Estado de la orden 96 actualizada a: 5
+Friday 3rd of May 2019 06:14:33 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 3rd of May 2019 06:14:33 PM, Estado de la orden 100 actualizada a: 3
+Friday 3rd of May 2019 08:13:03 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"20:27:48","Estado":"003"}
+Friday 3rd of May 2019 08:13:03 PM, Estado de la orden 100 actualizada a: 3
+Friday 3rd of May 2019 08:30:10 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"20:27:48","Estado":"003"}
+Friday 3rd of May 2019 08:30:10 PM, Estado de la orden 100 actualizada a: 3
+Monday 6th of May 2019 09:45:09 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"06-05-2019","Hora":"20:27:48","Estado":"003"}
+Monday 6th of May 2019 09:45:09 AM, Estado de la orden 100 actualizada a: 3
+Monday 13th of May 2019 03:28:16 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:33:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:42:44 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:42:52 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:43:34 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:44:18 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:44:49 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:44:55 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:45:26 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:50:26 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:50:32 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:50:34 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:50:36 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 03:50:37 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 04:03:01 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 04:19:11 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 04:21:42 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Monday 13th of May 2019 04:24:30 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 11:10:54 AM, se ejecuto ActionPaymentConfirmation Successful!!
+Friday 17th of May 2019 11:10:54 AM, JUAN IT
+Friday 17th of May 2019 11:10:55 AM, Resultado: 201_Información ingresó satisfactoriamente
+Friday 17th of May 2019 11:15:09 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"108","Fecha":"17-05-2019","Hora":"11:14:30","Estado":"003"}
+Friday 17th of May 2019 11:15:10 AM, Estado de la orden 108 actualizada a: 3
+Friday 17th of May 2019 12:38:12 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:06:16 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:11:03 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:13:20 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:13:24 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:13:28 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:20:18 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:21:07 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:21:41 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Friday 17th of May 2019 03:25:06 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"100","Fecha":"03-05-2019","Hora":"11:11:11","Estado":"003"}
+Tuesday 21st of May 2019 04:25:57 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"110","Fecha":"21-05-2019","Hora":"16:25:00","Estado":"006"}
+Tuesday 21st of May 2019 04:26:00 PM, Estado de la orden 110 actualizada a: 5
+Tuesday 28th of May 2019 04:38:25 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Tuesday 28th of May 2019 04:38:25 PM, Valentina Murillo Martinez
+Tuesday 28th of May 2019 04:38:39 PM, Resultado: 201_Información ingresó satisfactoriamente
+Tuesday 28th of May 2019 04:40:10 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"126","Fecha":"28-05-2019","Hora":"16:38:49","Estado":"003"}
+Tuesday 28th of May 2019 04:40:11 PM, Estado de la orden 126 actualizada a: 3
+Wednesday 29th of May 2019 06:22:32 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Wednesday 29th of May 2019 06:22:32 PM, Andrea Calderon Parias
+Wednesday 29th of May 2019 06:22:33 PM, Resultado: 201_Información ingresó satisfactoriamente
+Wednesday 29th of May 2019 06:25:10 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"125","Fecha":"29-05-2019","Hora":"18:23:46","Estado":"003"}
+Wednesday 29th of May 2019 06:25:11 PM, Estado de la orden 125 actualizada a: 3
+Tuesday 25th of June 2019 07:12:21 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Tuesday 25th of June 2019 07:12:21 PM, Maria Mantilla
+Tuesday 25th of June 2019 07:12:22 PM, Resultado: 201_Información ingresó satisfactoriamente
+Tuesday 25th of June 2019 07:17:11 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"25-06-2019","Hora":"19:12:50","Estado":"003"}
+Tuesday 25th of June 2019 07:17:12 PM, Estado de la orden 162 actualizada a: 3
+Wednesday 26th of June 2019 12:38:44 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Wednesday 26th of June 2019 12:38:44 PM, Luisa Villaneda
+Wednesday 26th of June 2019 12:38:45 PM, Resultado: 201_Información ingresó satisfactoriamente
+Wednesday 26th of June 2019 12:42:09 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"26-06-2019","Hora":"12:39:50","Estado":"003"}
+Wednesday 26th of June 2019 12:42:09 PM, La orden 163 ya tiene el estado numero: 3
+Wednesday 26th of June 2019 06:32:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"125","Fecha":"26-06-2019","Hora":"18:29:34","Estado":"004"}
+Wednesday 26th of June 2019 06:32:08 PM, Estado de la orden 125 actualizada a: 14
+Wednesday 26th of June 2019 07:17:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"26-06-2019","Hora":"19:16:00","Estado":"004"}
+Wednesday 26th of June 2019 07:17:08 PM, Estado de la orden 163 actualizada a: 14
+Wednesday 26th of June 2019 07:22:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"26-06-2019","Hora":"19:17:50","Estado":"004"}
+Wednesday 26th of June 2019 07:22:08 PM, Estado de la orden 162 actualizada a: 14
+Wednesday 26th of June 2019 10:22:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"26-06-2019","Hora":"10:20:06","Estado":"005"}
+Wednesday 26th of June 2019 10:22:10 PM, Estado de la orden 162 actualizada a: 4
+Wednesday 26th of June 2019 10:22:11 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"26-06-2019","Hora":"10:20:08","Estado":"005"}
+Wednesday 26th of June 2019 10:22:12 PM, Estado de la orden 163 actualizada a: 4
+Wednesday 26th of June 2019 10:27:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"26-06-2019","Hora":"22:20:08","Estado":"005"}
+Wednesday 26th of June 2019 10:27:08 PM, La orden 162 ya tiene el estado numero: 4
+Wednesday 26th of June 2019 10:27:08 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"26-06-2019","Hora":"22:20:08","Estado":"005"}
+Wednesday 26th of June 2019 10:27:08 PM, La orden 163 ya tiene el estado numero: 4
+Thursday 27th of June 2019 09:47:07 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"27-06-2019","Hora":"09:40:15","Estado":"006"}
+Thursday 27th of June 2019 09:47:07 AM, Error al completar la actualización del estado de la orden: 163, Mensaje: No se puede obtener el  invoiceNumber. Request: |{"aplicationName":"ABBOTT","billingName":"FE_SANDBOX_CO","minimumValue":"1024","idCart":3265,"idOrder":163}|, Response: ||.
+Thursday 27th of June 2019 10:02:07 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"27-06-2019","Hora":"09:40:15","Estado":"006"}
+Thursday 27th of June 2019 10:02:07 AM, Error al completar la actualización del estado de la orden: 163, Mensaje: No se puede obtener el  invoiceNumber. Request: |{"aplicationName":"ABBOTT","billingName":"FE_SANDBOX_CO","minimumValue":"1024","idCart":3265,"idOrder":163}|, Response: ||.
+Thursday 27th of June 2019 10:07:09 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"27-06-2019","Hora":"09:40:15","Estado":"006"}
+Thursday 27th of June 2019 10:07:10 AM, Error al completar la actualización del estado de la orden: 163, Mensaje: No se puede obtener el  invoiceNumber. Request: |{"aplicationName":"ABBOTT","billingName":"FE_SANDBOX_CO","minimumValue":"1024","idCart":3265,"idOrder":163}|, Response: ||.
+Thursday 27th of June 2019 04:47:06 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"27-06-2019","Hora":"09:40:15","Estado":"006"}
+Thursday 27th of June 2019 04:47:06 PM, Error al completar la actualización del estado de la orden: 162, Mensaje: No se puede obtener el  invoiceNumber. Request: |{"aplicationName":"ABBOTT","billingName":"FE_SANDBOX_CO","minimumValue":"1024","idCart":2627,"idOrder":162}|, Response: ||.
+Saturday 29th of June 2019 11:53:00 AM, se ejecuto ActionPaymentConfirmation Successful!!
+Saturday 29th of June 2019 11:53:00 AM, Patricia Jimenez
+Saturday 29th of June 2019 11:53:02 AM, Resultado: 201_Información ingresó satisfactoriamente
+Saturday 29th of June 2019 11:57:02 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"166","Fecha":"29-06-2019","Hora":"11:54:50","Estado":"003"}
+Saturday 29th of June 2019 11:57:03 AM, Estado de la orden 166 actualizada a: 3
+Monday 8th of July 2019 10:55:07 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"163","Fecha":"08-07-2019","Hora":"10:52:48","Estado":"005"}
+Monday 8th of July 2019 10:55:07 AM, La orden 163 ya tiene el estado numero: 4
+Monday 8th of July 2019 11:00:07 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"125","Fecha":"08-07-2019","Hora":"10:55:08","Estado":"005"}
+Monday 8th of July 2019 11:00:10 AM, Estado de la orden 125 actualizada a: 4
+Thursday 11th of July 2019 03:31:18 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 03:31:18 PM, Luisa Villaneda
+Thursday 11th of July 2019 03:31:19 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 03:35:00 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"176","Fecha":"11-07-2019","Hora":"15:31:39","Estado":"003"}
+Thursday 11th of July 2019 03:35:01 PM, Estado de la orden 176 actualizada a: 3
+Thursday 11th of July 2019 06:00:21 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 06:00:21 PM, Maria Mantilla
+Thursday 11th of July 2019 06:00:22 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 06:04:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"175","Fecha":"11-07-2019","Hora":"18:01:37","Estado":"003"}
+Thursday 11th of July 2019 06:05:01 PM, Estado de la orden 175 actualizada a: 3
+Thursday 11th of July 2019 06:29:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"176","Fecha":"11-07-2019","Hora":"18:26:32","Estado":"004"}
+Thursday 11th of July 2019 06:29:59 PM, Estado de la orden 176 actualizada a: 14
+Thursday 11th of July 2019 06:54:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"175","Fecha":"11-07-2019","Hora":"18:54:25","Estado":"004"}
+Thursday 11th of July 2019 06:54:59 PM, Estado de la orden 175 actualizada a: 14
+Thursday 11th of July 2019 06:59:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"176","Fecha":"11-07-2019","Hora":"18:57:20","Estado":"005"}
+Thursday 11th of July 2019 07:00:01 PM, Estado de la orden 176 actualizada a: 4
+Thursday 11th of July 2019 07:27:06 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 07:27:06 PM, Luisa Villaneda
+Thursday 11th of July 2019 07:27:07 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 07:29:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"183","Fecha":"11-07-2019","Hora":"19:28:37","Estado":"003"}
+Thursday 11th of July 2019 07:30:00 PM, Estado de la orden 183 actualizada a: 3
+Thursday 11th of July 2019 07:34:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"183","Fecha":"11-07-2019","Hora":"19:33:16","Estado":"004"}
+Thursday 11th of July 2019 07:34:59 PM, Estado de la orden 183 actualizada a: 14
+Thursday 11th of July 2019 07:34:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"183","Fecha":"11-07-2019","Hora":"19:34:01","Estado":"005"}
+Thursday 11th of July 2019 07:35:01 PM, Estado de la orden 183 actualizada a: 4
+Thursday 11th of July 2019 08:04:13 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 08:04:13 PM, Maria Mantilla
+Thursday 11th of July 2019 08:04:14 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 08:04:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"184","Fecha":"11-07-2019","Hora":"20:04:37","Estado":"003"}
+Thursday 11th of July 2019 08:05:00 PM, Estado de la orden 184 actualizada a: 3
+Thursday 11th of July 2019 08:12:19 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 08:12:19 PM, Jose Crespo
+Thursday 11th of July 2019 08:12:20 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 08:14:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"181","Fecha":"11-07-2019","Hora":"20:13:37","Estado":"003"}
+Thursday 11th of July 2019 08:15:00 PM, Estado de la orden 181 actualizada a: 3
+Thursday 11th of July 2019 09:41:30 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Thursday 11th of July 2019 09:41:30 PM, Maria Mantilla
+Thursday 11th of July 2019 09:41:31 PM, Resultado: 201_Información ingresó satisfactoriamente
+Thursday 11th of July 2019 09:44:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"177","Fecha":"11-07-2019","Hora":"21:43:36","Estado":"003"}
+Thursday 11th of July 2019 09:45:01 PM, Estado de la orden 177 actualizada a: 3
+Friday 12th of July 2019 06:39:57 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"162","Fecha":"12-07-2019","Hora":"18:37:42","Estado":"005"}
+Friday 12th of July 2019 06:39:57 PM, La orden 162 ya tiene el estado numero: 4
+Friday 12th of July 2019 06:39:57 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"184","Fecha":"12-07-2019","Hora":"18:36:06","Estado":"004"}
+Friday 12th of July 2019 06:39:57 PM, Estado de la orden 184 actualizada a: 14
+Saturday 20th of July 2019 04:13:37 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Saturday 20th of July 2019 04:13:37 PM, Allen Rios
+Saturday 20th of July 2019 04:13:39 PM, Resultado: 201_Información ingresó satisfactoriamente
+Monday 22nd of July 2019 07:05:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"196","Fecha":"22-07-2019","Hora":"19:02:46","Estado":"004"}
+Monday 22nd of July 2019 07:05:59 PM, Estado de la orden 196 actualizada a: 14
+Monday 22nd of July 2019 07:05:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"196","Fecha":"22-07-2019","Hora":"19:03:19","Estado":"005"}
+Monday 22nd of July 2019 07:06:00 PM, Estado de la orden 196 actualizada a: 4
+Monday 22nd of July 2019 07:51:46 PM, se ejecuto ActionPaymentConfirmation Successful!!
+Monday 22nd of July 2019 07:51:46 PM, Luisa Villaneda
+Monday 22nd of July 2019 07:51:47 PM, Resultado: 201_Información ingresó satisfactoriamente
+Monday 22nd of July 2019 07:55:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"197","Fecha":"22-07-2019","Hora":"19:51:23","Estado":"003"}
+Monday 22nd of July 2019 07:56:01 PM, Estado de la orden 197 actualizada a: 3
+Monday 22nd of July 2019 09:15:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"197","Fecha":"22-07-2019","Hora":"21:10:31","Estado":"004"}
+Monday 22nd of July 2019 09:15:59 PM, Estado de la orden 197 actualizada a: 14
+Monday 22nd of July 2019 09:30:59 PM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"197","Fecha":"22-07-2019","Hora":"21:28:07","Estado":"005"}
+Monday 22nd of July 2019 09:30:59 PM, Estado de la orden 197 actualizada a: 4
+Tuesday 23rd of July 2019 10:15:32 AM, se ejecuto ActionPaymentConfirmation Successful!!
+Tuesday 23rd of July 2019 10:15:32 AM, Luisa Villaneda
+Tuesday 23rd of July 2019 10:15:33 AM, Resultado: 201_Información ingresó satisfactoriamente
+Tuesday 23rd of July 2019 10:20:57 AM, {"Token":"PJFDW9M21JEYU2XJCQRU3199CJAQ4DYE","NroPedido":"202","Fecha":"23-07-2019","Hora":"10:15:24","Estado":"003"}
+Tuesday 23rd of July 2019 10:20:59 AM, Estado de la orden 202 actualizada a: 3
