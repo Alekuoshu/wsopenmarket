@@ -79,61 +79,79 @@ class Service
             // evaluar los estados para mostrar la respuesta
             switch ($inPicking['Estado']) {
             case '003':
+            case '03':
                 $pconfirmation = '200 - Preparación en curso';
                 $new_order_state = 3;
                 $state = true;
                 break;
             case '004':
+            case '04':
                 $pconfirmation = '200 - Empacado';
                 $new_order_state = 14;
                 $state = true;
                 break;
             case '005':
+            case '05':
                 $pconfirmation = '200 - Enviado';
                 $new_order_state = 4;
                 $state = true;
                 break;
             case '006':
+            case '06':
                 $pconfirmation = '200 - Entregado';
                 $new_order_state = 5;
                 $state = true;
                 break;
             case '007':
+            case '07':
                 $pconfirmation = '200 - Devuelto';
                 $new_order_state = 15;
                 $state = true;
                 break;
             case '008':
+            case '08':
                 $pconfirmation = '200 - Rechazado';
                 $new_order_state = 16;
                 $state = true;
                 break;
-            case '00099':
+            case '0099':
+            case '099':
+            case '99':
                 $pconfirmation = '200 - No se Encontró el Encargado del Recibo del Pedido';
                 $new_order_state = 19;
                 $state = true;
                 break;
             case '0098':
+            case '098':
+            case '98':
                 $pconfirmation = '200 - Dirección Errada';
                 $new_order_state = 20;
                 $state = true;
                 break;
             case '0097':
+            case '097':
+            case '97':
                 $pconfirmation = '200 - Mercancía en Mal Estado No Apta para su Entrega';
                 $new_order_state = 21;
                 $state = true;
                 break;
             case '0096':
+            case '096':
+            case '96':
                 $pconfirmation = '200 - Mercancía no solicitada por Destinatario';
                 $new_order_state = 22;
                 $state = true;
                 break;
             case '0095':
+            case '095':
+            case '95':
                 $pconfirmation = '200 - Falta documentos de Soporte y/o Aviso de Despacho';
                 $new_order_state = 23;
                 $state = true;
                 break;
             case '0094':
+            case '094':
+            case '94':
                 $pconfirmation = '200 - Cambio de Dirección y/o Ciudad de Entrega';
                 $new_order_state = 24;
                 $state = true;

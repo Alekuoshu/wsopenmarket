@@ -571,6 +571,10 @@ class Wsopenmarket extends Module
         $CodigoProducto = $product['reference'];
         // replace -1 in reference before sent to open market
         $CodigoProducto = str_replace("-1", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-2", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-3", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-4", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-5", "", $CodigoProducto);
         $UnidadesSolucitadas = $product['quantity'];
 
         // add input params
