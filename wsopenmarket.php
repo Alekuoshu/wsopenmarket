@@ -28,12 +28,13 @@ class Wsopenmarket extends Module
  private $WSOPENMARKET_WS_PRODUCTION_ORDEN_URL;
  private $WSOPENMARKET_WS_PRODUCTION_USER;
  private $WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+ private $WSOPENMARKET_GET_ID_ORDER;
 
  public function __construct()
  {
   $this->name = 'wsopenmarket';
   $this->tab = 'front_office_features';
-  $this->version = '1.0.0';
+  $this->version = '1.1.0';
   $this->author = 'Farmalisto';
   $this->need_instance = 0;
 
@@ -57,6 +58,7 @@ class Wsopenmarket extends Module
   $this->WSOPENMARKET_WS_PRODUCTION_ORDEN_URL = Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL');
   $this->WSOPENMARKET_WS_PRODUCTION_USER = Configuration::get('WSOPENMARKET_WS_PRODUCTION_USER');
   $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD = Configuration::get('WSOPENMARKET_WS_PRODUCTION_PASSWORD');
+  $this->WSOPENMARKET_GET_ID_ORDER = Tools::getValue('WSOPENMARKET_GET_ID_ORDER');
 
   if ($this->active && Configuration::get('wsopenmarket') == '') {
    $this->warning = $this->l('You have to configure your module');
@@ -112,6 +114,7 @@ class Wsopenmarket extends Module
   $res &= $this->registerHook('backOfficeHeader');
   $res &= $this->registerHook('displayHome');
   $res &= $this->registerHook('ActionPaymentConfirmation');
+  $res &= $this->registerHook('actionValidateOrder');
   $res &= $this->registerHook('moduleRoutes');
   return $res;
  }
@@ -128,6 +131,7 @@ class Wsopenmarket extends Module
   $res &= $this->unRegisterHook('backOfficeHeader');
   $res &= $this->unRegisterHook('displayHome');
   $res &= $this->unRegisterHook('ActionPaymentConfirmation');
+  $res &= $this->unRegisterHook('actionValidateOrder');
   $res &= $this->unRegisterHook('moduleRoutes');
   return $res;
  }
@@ -212,6 +216,13 @@ class Wsopenmarket extends Module
    */
   if (((bool) Tools::isSubmit('submitWsopenmarketModule')) == true) {
    $this->postProcess();
+
+   $id_orderM = (int)trim($this->WSOPENMARKET_GET_ID_ORDER);
+      if($id_orderM){
+          self::logtxt("Entered in manually mode... ID_Order: $id_orderM");
+          $this->sendManuallyOrders($id_orderM);
+
+      }
   }
 
   $this->context->smarty->assign('module_dir', $this->_path);
@@ -245,7 +256,7 @@ class Wsopenmarket extends Module
    'id_language' => $this->context->language->id,
   );
 
-  return $helper->generateForm(array($this->getConfigForm(), $this->getCredentialsForm()));
+  return $helper->generateForm(array($this->getConfigForm(), $this->getCredentialsForm(), $this->getSendManuallyForm()));
  }
 
  /**
@@ -339,6 +350,35 @@ class Wsopenmarket extends Module
  }
 
  /**
+     * Create the structure of send manually data.
+     */
+    protected function getSendManuallyForm()
+    {
+        return array(
+            // Send manually data
+        'form' => array(
+            'legend' => array(
+            'title' => $this->l('Send Manually Data'),
+            'icon' => 'icon-terminal',
+            ),
+            'input' => array(
+            array(
+                'col' => 3,
+                'type' => 'text',
+                'prefix' => '<i class="icon icon-gears"></i>',
+                'desc' => $this->l('Enter order id'),
+                'name' => 'WSOPENMARKET_GET_ID_ORDER',
+                'label' => $this->l('Order ID'),
+            ),
+            ),
+            'submit' => array(
+            'title' => $this->l('Send'),
+            ),
+        ),
+        );
+    }
+
+ /**
   * Set values for the inputs.
   */
  protected function getConfigFormValues()
@@ -350,6 +390,7 @@ class Wsopenmarket extends Module
    'WSOPENMARKET_WS_PRODUCTION_ORDEN_URL' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_ORDEN_URL'),
    'WSOPENMARKET_WS_PRODUCTION_USER' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_USER'),
    'WSOPENMARKET_WS_PRODUCTION_PASSWORD' => Configuration::get('WSOPENMARKET_WS_PRODUCTION_PASSWORD'),
+   'WSOPENMARKET_GET_ID_ORDER' => Tools::getValue('WSOPENMARKET_GET_ID_ORDER'),
   );
  }
 
@@ -386,6 +427,19 @@ class Wsopenmarket extends Module
  }
 
  /**
+     * Recursively create a string of directories
+     */
+    public static function createPath($path) {
+
+      if (is_dir($path))
+          return true;
+
+      $prev_path = substr($path, 0, strrpos($path, '/', -2) + 1);
+      $return = self::createPath($prev_path);
+      return ($return && is_writable($prev_path)) ? mkdir($path) : false;
+  }
+
+ /**
   * Add the CSS & JavaScript files you want to be loaded in the BO.
   */
  public function hookBackOfficeHeader()
@@ -407,91 +461,12 @@ class Wsopenmarket extends Module
 
  public function hookDisplayHome()
  {
-  if ($this->WSOPENMARKET_SANDBOX_MODE == 1) {
-
-   try {
-    self::logtxt("probando log en hookDisplayHome() en modo Sandbox");
-
-    require_once 'ws/orden_client.php';
-
-    $wsOrden = new Orden();
-    $orden = $wsOrden->getDataOrdenSandbox();
-
-    // set to smarty template values
-    $this->context->smarty->assign('orden', $orden);
-
-    // Hook::exec('ActionPaymentConfirmation');
-
-
-    return $this->display(__FILE__, 'wsopenmarketSandbox.tpl');
-
-   } catch (Exception $e) {
-    $this->setErrorMessage("Exeptions on hookDisplayHome: " . $e->getMessage());
-    self::logtxt("Exeptions on hookDisplayHome: " . $e->getMessage());
-   }
-
-  } else {
-    try {
-      // self::logtxt("probando log en hookDisplayHome() en modo Production");
-
-      // require_once 'ws/orden_client.php';
-
-      // // add input params
-      // $DESPACHOS = array();
-      // $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
-      // $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
-      // // cabecera
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = '406'; // id orden
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = '406'; // id orden
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = '406'; // id orden
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = '27/03/2019';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = '16:58:02';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = '16355867';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = 'Alejandro Villegas';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = 'Calle 69a, #118b-11, Engativá, Bogotá';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = '11001';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = '3022471141';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = '3022471141';
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = '27/03/2019'; //fecha del pedido
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = '27/03/2019'; // fecha del pedido
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = ''; // siempre vacio
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = 7500;
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
-      // $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
-      // // Detalle
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = '406';
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = '406';
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = 1;
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = 'PRD200';
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = 1;
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
-      // $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
-
-      // $wsOrden = new Orden();
-      // $orden = $wsOrden->getDataOrden($DESPACHOS);
-
-      // // set to smarty template values
-      // $this->context->smarty->assign('orden', $orden);
-      // self::logtxt("Resultado: $orden");
-
-      // return $this->display(__FILE__, 'wsopenmarketMessage.tpl');
-
-    } catch (Exception $e) {
-        $this->setErrorMessage("Exeptions on hookDisplayHome: " . $e->getMessage());
-        self::logtxt("Exeptions on hookDisplayHome: " . $e->getMessage());
-    }
-
-  }
+  
 
  }
 
  // hook para atajar los valores del pedido despues del pago del mismo
- public function hookActionPaymentConfirmation($params)
+ public function hookActionPaymentConfirmation($params) 
  {
 
   self::logtxt("se ejecuto ActionPaymentConfirmation Successful!!");
@@ -500,7 +475,7 @@ class Wsopenmarket extends Module
     try {
 
       
-      $id_order = $params['id_order'];
+      $id_order = (int)$params['id_order'];
       $order = new OrderCore($id_order);
       // consultar customer email DB/////
       $db = Db::getInstance();
@@ -508,8 +483,400 @@ class Wsopenmarket extends Module
       $customerEmail = $db->getValue($sql);
       ///////////////////////////////////////////
 
-      $cart = new Cart($order->id_cart);
-      $products = $cart->getProducts();
+      $itemsDetails = $this->getOrderDetails($id_order);
+
+      // $cart = new Cart($order->id_cart);
+      // $products = $cart->getProducts();
+
+      $number_products = count($itemsDetails); // para saber cuantos items tiene cada pedido y enviar el xml
+      $customers = new CustomerCore();
+      $customer = $customers->getCustomersByEmail($customerEmail);
+
+      // self::logtxt("---AQUI---");
+
+
+      self::logtxt("numero de productos: $number_products");
+
+      // cabecera
+      $NroPedido = $id_order;
+      $Documento = $id_order;
+      $customer_firstname = $customer[0]['firstname'];
+      $customer_lastname = $customer[0]['lastname'];
+      self::logtxt("$customer_firstname $customer_lastname"); //testing
+      
+      $FechaHora = $order->date_add;
+      // formatear fecha
+      $FechaPedido = substr($FechaHora, 0, 10);
+      $FechaPedido = strtotime($FechaPedido);
+      $FechaPedido = date('d-m-Y', $FechaPedido);
+      // formatear hora
+      $HoraPedido = substr($FechaHora, 11, 19);
+      // obtenemos la direccion y datos del cliente
+      $id_address_delivery = $order->id_address_delivery;
+      $address = new Address((int) $id_address_delivery);
+      if (Validate::isLoadedObject($address)) {
+          $FullAddress = $address->address1.' - '.$address->address2;
+          $TelefonoDestinatario = $address->phone;
+          $CelularDestinatario = $address->phone_mobile;
+          $CodigoDestinatario = $address->dni;
+          $CiudadDes = $address->city;
+          $other = $address->other;
+          $id_state = $address->id_state;
+      } else {
+          self::logtxt("Dirección erronea, el objeto no es válido");
+      }
+      $ValorAsegurado = round($order->total_paid, 2);
+
+      // obtenemos el codigo dane segun la ciudad del destinatario
+      setlocale(LC_ALL, 'en_US.UTF8');
+      $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
+      $Ciudad = mb_strtoupper($CiudadDes);
+      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // detalle
+      $OrdenCompra = $id_order;
+
+      // Mensaje del chekout
+      // $messageCore = new MessageCore();
+      // $message = $messageCore->getMessagesByOrderId($id_order);
+      // $observaciones = '';
+      // if(isset($message)){
+      //   $observaciones = substr($message[0]['message'], 0, 200);
+      // }
+
+      // dejar en porteria
+      $observaciones = '';
+      if($other == '1'){
+        $observaciones = "Dejar el pedido en porteria!";
+      }
+
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
+      // Armando el xml de envio:
+      require_once 'ws/orden_client.php';
+
+      // iteramos el pedido
+      foreach ($itemsDetails as $key => $product) {
+        
+        $Consecutivo = ($key+1);
+        $CodigoProducto = trim($product['codigo_producto']);
+        // replace -1 in reference before sent to open market
+        $CodigoProducto = str_replace("-1", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-2", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-3", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-4", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-5", "", $CodigoProducto);
+        $UnidadesSolucitadas = $product['unidades'];
+
+        // add input params
+        $DESPACHOS = array();
+        $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+        $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+        // cabecera
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = $Documento; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = $OrdenCompra; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = $NroPedido; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = $FechaPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = $HoraPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = $CodigoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = $customer_firstname.' '.$customer_lastname;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = $FullAddress;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = $CiudadDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+        // Detalle
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = $Consecutivo;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = $CodigoProducto;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = $UnidadesSolucitadas;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+
+        // self::logtxt("Consecutivo: $Consecutivo");
+
+        $res = json_encode($DESPACHOS);
+        self::logtxt("Json Enviado: $res");
+
+        $wsOrden = new Orden();
+        $orden = $wsOrden->getDataOrden($DESPACHOS);
+        self::logtxt("Resultado: $orden");
+
+        if($orden == '201_Información ingresó satisfactoriamente'){
+
+          // update status
+          $result = Db::getInstance()->update('wsopenmarket', array(
+            'estado' => 1,
+            'date_upd' => date("Y-m-d H:i:s"),
+          ), 'id_orden = '.(int)$id_order);
+          $error = Db::getInstance()->getMsgError();
+
+          if ($result == true) {
+              self::logtxt("Registro actualizado en wsopenmarket con exito");
+          } else {
+              if ($error != '') {
+                  self::logtxt($error);
+              }
+              self::logtxt("Hubo un error al intentar actualizar en wsopenmarket");
+          }
+
+        }
+
+        // set to smarty template values
+        // $this->context->smarty->assign('orden', $orden);
+        // self::logtxt("Resultado: $orden");
+
+        // return $this->display(__FILE__, 'wsopenmarketMessage.tpl'); // only for testing
+        
+      // for testing//
+      // echo "<pre>";
+      // var_dump($DESPACHOS);
+      // echo "</pre>";
+
+      // if($Consecutivo > 1) {
+      //   self::logtxt("$order");
+      // }
+
+
+
+      } //end foreach
+        
+
+    } catch (Exception $e) {
+        self::logtxt("Exeptions on hookActionPaymentConfirmation: " . $e->getMessage());
+    }
+  } // end production
+  else {
+    self::logtxt("Modo Sandbox!");
+
+    try {
+
+      
+      $id_order = (int)$params['id_order'];
+      $order = new OrderCore($id_order);
+      // consultar customer email DB/////
+      $db = Db::getInstance();
+      $sql = 'SELECT email FROM '._DB_PREFIX_.'customer WHERE id_customer = '.$order->id_customer;
+      $customerEmail = $db->getValue($sql);
+      ///////////////////////////////////////////
+
+      $itemsDetails = $this->getOrderDetails($id_order);
+
+      // $cart = new Cart($order->id_cart);
+      // $products = $cart->getProducts();
+
+      $number_products = count($itemsDetails); // para saber cuantos items tiene cada pedido y enviar el xml
+      $customers = new CustomerCore();
+      $customer = $customers->getCustomersByEmail($customerEmail);
+
+      // self::logtxt("---AQUI---");
+
+
+      self::logtxt("numero de productos: $number_products");
+
+      // cabecera
+      $NroPedido = $id_order;
+      $Documento = $id_order;
+      $customer_firstname = $customer[0]['firstname'];
+      $customer_lastname = $customer[0]['lastname'];
+      self::logtxt("$customer_firstname $customer_lastname"); //testing
+      
+      $FechaHora = $order->date_add;
+      // formatear fecha
+      $FechaPedido = substr($FechaHora, 0, 10);
+      $FechaPedido = strtotime($FechaPedido);
+      $FechaPedido = date('d-m-Y', $FechaPedido);
+      // formatear hora
+      $HoraPedido = substr($FechaHora, 11, 19);
+      // obtenemos la direccion y datos del cliente
+      $id_address_delivery = $order->id_address_delivery;
+      $address = new Address((int) $id_address_delivery);
+      if (Validate::isLoadedObject($address)) {
+          $FullAddress = $address->address1.' - '.$address->address2;
+          $TelefonoDestinatario = $address->phone;
+          $CelularDestinatario = $address->phone_mobile;
+          $CodigoDestinatario = $address->dni;
+          $CiudadDes = $address->city;
+          $other = $address->other;
+          $id_state = $address->id_state;
+      } else {
+          self::logtxt("Dirección erronea, el objeto no es válido");
+      }
+      $ValorAsegurado = round($order->total_paid, 2);
+
+      // obtenemos el codigo dane segun la ciudad del destinatario
+      setlocale(LC_ALL, 'en_US.UTF8');
+      $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
+      $Ciudad = mb_strtoupper($CiudadDes);
+      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // detalle
+      $OrdenCompra = $id_order;
+
+      // Mensaje del chekout
+      // $messageCore = new MessageCore();
+      // $message = $messageCore->getMessagesByOrderId($id_order);
+      // $observaciones = '';
+      // if(isset($message)){
+      //   $observaciones = substr($message[0]['message'], 0, 200);
+      // }
+
+      // dejar en porteria
+      $observaciones = '';
+      if($other == '1'){
+        $observaciones = "Dejar el pedido en porteria!";
+      }
+
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
+      // Armando el xml de envio:
+      require_once 'ws/orden_client.php';
+
+      // iteramos el pedido
+      foreach ($itemsDetails as $key => $product) {
+        
+        $Consecutivo = ($key+1);
+        $CodigoProducto = trim($product['codigo_producto']);
+        // replace -1 in reference before sent to open market
+        $CodigoProducto = str_replace("-1", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-2", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-3", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-4", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-5", "", $CodigoProducto);
+        $UnidadesSolucitadas = $product['unidades'];
+
+        // add input params
+        $DESPACHOS = array();
+        $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+        $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+        // cabecera
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = $Documento; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = $OrdenCompra; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = $NroPedido; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = $FechaPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = $HoraPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = $CodigoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = $customer_firstname.' '.$customer_lastname;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = $FullAddress;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = $CiudadDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+        // Detalle
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = $Consecutivo;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = $CodigoProducto;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = $UnidadesSolucitadas;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+
+        // self::logtxt("Consecutivo: $Consecutivo");
+
+        $res = json_encode($DESPACHOS);
+        self::logtxt("Json Enviado: $res");
+
+        // $wsOrden = new Orden();
+        // $orden = $wsOrden->getDataOrden($DESPACHOS);
+        // self::logtxt("Resultado: $orden");
+
+        // if($orden == '201_Información ingresó satisfactoriamente'){
+
+        //   // update status
+        //   $result = Db::getInstance()->update('wsopenmarket', array(
+        //     'estado' => 1,
+        //     'date_upd' => date("Y-m-d H:i:s"),
+        //   ), 'id_orden = '.(int)$id_order);
+        //   $error = Db::getInstance()->getMsgError();
+
+        //   if ($result == true) {
+        //       self::logtxt("Registro actualizado en wsopenmarket con exito");
+        //   } else {
+        //       if ($error != '') {
+        //           self::logtxt($error);
+        //       }
+        //       self::logtxt("Hubo un error al intentar actualizar en wsopenmarket");
+        //   }
+
+        // }
+
+
+      // if($Consecutivo > 1) {
+      //   self::logtxt("$order");
+      // }
+
+
+
+      } //end foreach
+        
+
+    } catch (Exception $e) {
+        self::logtxt("Exeptions on hookActionPaymentConfirmation: " . $e->getMessage());
+    }
+
+
+  } //end sandbox
+
+
+ }
+
+
+ // enviar data manualmente
+ public function sendManuallyOrders($id_order)
+ {
+
+  self::logtxt("se ejecuto sendManuallyOrders Successful!!");
+
+  if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
+    try {
+
+      
+      $id_order = (int)trim($this->WSOPENMARKET_GET_ID_ORDER);
+      $order = new OrderCore($id_order);
+      // consultar customer email DB/////
+      $db = Db::getInstance();
+      $sql = 'SELECT email FROM '._DB_PREFIX_.'customer WHERE id_customer = '.$order->id_customer;
+      $customerEmail = $db->getValue($sql);
+      ///////////////////////////////////////////
+
+      $itemsDetails = $this->getOrderDetails($id_order);
+
+      // si existen datos en la db wsopenmarket
+      if($itemsDetails){
+        $products = $itemsDetails;
+      }else{
+        // sino entonces se buscan del carrito normalmente
+        $cart = new Cart($order->id_cart);
+        $products = $cart->getProducts();
+      }
+
       $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
       $customers = new CustomerCore();
       $customer = $customers->getCustomersByEmail($customerEmail);
@@ -542,6 +909,8 @@ class Wsopenmarket extends Module
           $CelularDestinatario = $address->phone_mobile;
           $CodigoDestinatario = $address->dni;
           $CiudadDes = $address->city;
+          $other = $address->other;
+          $id_state = $address->id_state;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
@@ -551,15 +920,29 @@ class Wsopenmarket extends Module
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-      $CiudadDestinatario = Wsopenmarket::DaneCode($Ciudad);
+      self::logtxt("Ciudad: $Ciudad");
+      $CiudadDestinatario = $this->DaneCode($Ciudad);
 
       // detalle
       $OrdenCompra = $id_order;
 
       // Mensaje del chekout
-      $messageCore = new MessageCore();
-      $message = $messageCore->getMessagesByOrderId($id_order);
-      $observaciones = substr($message[0]['message'], 0, 200);
+      // $messageCore = new MessageCore();
+      // $message = $messageCore->getMessagesByOrderId($id_order);
+      // $observaciones = '';
+      // if(isset($message)){
+      //   $observaciones = substr($message[0]['message'], 0, 200);
+      // }
+
+      // dejar en porteria
+      $observaciones = '';
+      if($other == '1'){
+        $observaciones = "Dejar el pedido en porteria!";
+      }
+
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
@@ -568,14 +951,22 @@ class Wsopenmarket extends Module
       foreach ($products as $key => $product) {
         
         $Consecutivo = ($key+1);
-        $CodigoProducto = $product['reference'];
+        if(isset($product['codigo_producto'])){
+          $CodigoProducto = trim($product['codigo_producto']);
+        }else{
+          $CodigoProducto = trim($product['reference']);
+        }
         // replace -1 in reference before sent to open market
         $CodigoProducto = str_replace("-1", "", $CodigoProducto);
         $CodigoProducto = str_replace("-2", "", $CodigoProducto);
         $CodigoProducto = str_replace("-3", "", $CodigoProducto);
         $CodigoProducto = str_replace("-4", "", $CodigoProducto);
         $CodigoProducto = str_replace("-5", "", $CodigoProducto);
-        $UnidadesSolucitadas = $product['quantity'];
+        if(isset($product['unidades'])){
+          $UnidadesSolucitadas = $product['unidades'];
+        }else{
+          $UnidadesSolucitadas = trim($product['quantity']);
+        }
 
         // add input params
         $DESPACHOS = array();
@@ -595,6 +986,7 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
@@ -616,10 +1008,31 @@ class Wsopenmarket extends Module
         // self::logtxt("Consecutivo: $Consecutivo");
 
         $res = json_encode($DESPACHOS);
-        self::logtxt("Resultado: $res");
+        self::logtxt("Json Enviado: $res");
 
         $wsOrden = new Orden();
         $orden = $wsOrden->getDataOrden($DESPACHOS);
+        self::logtxt("Resultado: $orden");
+
+        if($orden == '201_Información ingresó satisfactoriamente'){
+
+          // update status
+          $result = Db::getInstance()->update('wsopenmarket', array(
+            'estado' => 1,
+            'date_upd' => date("Y-m-d H:i:s"),
+          ), 'id_orden = '.(int)$id_order);
+          $error = Db::getInstance()->getMsgError();
+
+          if ($result == true) {
+              self::logtxt("Registro actualizado en wsopenmarket con exito");
+          } else {
+              if ($error != '') {
+                  self::logtxt($error);
+              }
+              self::logtxt("Hubo un error al intentar actualizar en wsopenmarket");
+          }
+
+        }
 
         // set to smarty template values
         // $this->context->smarty->assign('orden', $orden);
@@ -642,29 +1055,348 @@ class Wsopenmarket extends Module
         
 
     } catch (Exception $e) {
-        $this->setErrorMessage("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
-        self::logtxt("Exeptions on hookdisplayOrderDetail: " . $e->getMessage());
+        self::logtxt("Exeptions on sendManuallyOrders: " . $e->getMessage());
+    }
+  } // end production
+  else {
+    self::logtxt("Modo Sandbox!");
+
+    try {
+
+      
+      $id_order = (int)trim($this->WSOPENMARKET_GET_ID_ORDER);
+      $order = new OrderCore($id_order);
+      // consultar customer email DB/////
+      $db = Db::getInstance();
+      $sql = 'SELECT email FROM '._DB_PREFIX_.'customer WHERE id_customer = '.$order->id_customer;
+      $customerEmail = $db->getValue($sql);
+      ///////////////////////////////////////////
+
+      $itemsDetails = $this->getOrderDetails($id_order);
+
+      // si existen datos en la db wsopenmarket
+      if($itemsDetails){
+        $products = $itemsDetails;
+      }else{
+        // sino entonces se buscan del carrito normalmente
+        $cart = new Cart($order->id_cart);
+        $products = $cart->getProducts();
+      }
+
+      $number_products = count($products); // para saber cuantos items tiene cada pedido y enviar el xml
+      $customers = new CustomerCore();
+      $customer = $customers->getCustomersByEmail($customerEmail);
+
+      // self::logtxt("---AQUI---");
+
+
+      self::logtxt("numero de productos: $number_products");
+
+      // cabecera
+      $NroPedido = $id_order;
+      $Documento = $id_order;
+      $customer_firstname = $customer[0]['firstname'];
+      $customer_lastname = $customer[0]['lastname'];
+      self::logtxt("$customer_firstname $customer_lastname"); //testing
+      
+      $FechaHora = $order->date_add;
+      // formatear fecha
+      $FechaPedido = substr($FechaHora, 0, 10);
+      $FechaPedido = strtotime($FechaPedido);
+      $FechaPedido = date('d-m-Y', $FechaPedido);
+      // formatear hora
+      $HoraPedido = substr($FechaHora, 11, 19);
+      // obtenemos la direccion y datos del cliente
+      $id_address_delivery = $order->id_address_delivery;
+      $address = new Address((int) $id_address_delivery);
+      if (Validate::isLoadedObject($address)) {
+          $FullAddress = $address->address1.' - '.$address->address2;
+          $TelefonoDestinatario = $address->phone;
+          $CelularDestinatario = $address->phone_mobile;
+          $CodigoDestinatario = $address->dni;
+          $CiudadDes = $address->city;
+          $other = $address->other;
+          $id_state = $address->id_state;
+      } else {
+          self::logtxt("Dirección erronea, el objeto no es válido");
+      }
+      $ValorAsegurado = round($order->total_paid, 2);
+
+      // obtenemos el codigo dane segun la ciudad del destinatario
+      setlocale(LC_ALL, 'en_US.UTF8');
+      $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
+      $Ciudad = mb_strtoupper($CiudadDes);
+      self::logtxt("Ciudad: $Ciudad");
+      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // detalle
+      $OrdenCompra = $id_order;
+
+      // Mensaje del chekout
+      // $messageCore = new MessageCore();
+      // $message = $messageCore->getMessagesByOrderId($id_order);
+      // $observaciones = '';
+      // if(isset($message)){
+      //   $observaciones = substr($message[0]['message'], 0, 200);
+      // }
+
+      // dejar en porteria
+      $observaciones = '';
+      if($other == '1'){
+        $observaciones = "Dejar el pedido en porteria!";
+      }
+
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
+      // Armando el xml de envio:
+      require_once 'ws/orden_client.php';
+
+      // iteramos el pedido
+      foreach ($products as $key => $product) {
+        
+        $Consecutivo = ($key+1);
+        if(isset($product['codigo_producto'])){
+          $CodigoProducto = trim($product['codigo_producto']);
+        }else{
+          $CodigoProducto = trim($product['reference']);
+        }
+        // replace -1 in reference before sent to open market
+        $CodigoProducto = str_replace("-1", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-2", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-3", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-4", "", $CodigoProducto);
+        $CodigoProducto = str_replace("-5", "", $CodigoProducto);
+        if(isset($product['unidades'])){
+          $UnidadesSolucitadas = $product['unidades'];
+        }else{
+          $UnidadesSolucitadas = trim($product['quantity']);
+        }
+        
+        // add input params
+        $DESPACHOS = array();
+        $DESPACHOS['Usuario'] = $this->WSOPENMARKET_WS_PRODUCTION_USER;
+        $DESPACHOS['Clave'] = $this->WSOPENMARKET_WS_PRODUCTION_PASSWORD;
+        // cabecera
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Documento'] = $Documento; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['OrdenCompra'] = $OrdenCompra; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NroPedido'] = $NroPedido; // id orden
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaPedido'] = $FechaPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['HoraPedido'] = $HoraPedido;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CodigoDestinatario'] = $CodigoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['NombreDestinatario'] = $customer_firstname.' '.$customer_lastname;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DireccionDestinatario'] = $FullAddress;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CiudadDestinatario'] = $CiudadDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaReciboIntegracion'] = ''; //dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['EstadoProceso'] = 'N'; // siempre N
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
+        // Detalle
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Consecutivo'] = $Consecutivo;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['CodigoProducto'] = $CodigoProducto;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Lote'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['UnidadesSolucitadas'] = $UnidadesSolucitadas;
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Bodega'] = ''; //dejar vacio
+        $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['EstadoRegistro'] = 'N'; //siempre es N
+
+        // self::logtxt("Consecutivo: $Consecutivo");
+
+        $res = json_encode($DESPACHOS);
+        self::logtxt("Json Enviado: $res");
+
+        // $wsOrden = new Orden();
+        // $orden = $wsOrden->getDataOrden($DESPACHOS);
+        // self::logtxt("Resultado: $orden");
+
+        // if($orden == '201_Información ingresó satisfactoriamente'){
+
+        //   // update status
+        //   $result = Db::getInstance()->update('wsopenmarket', array(
+        //     'estado' => 1,
+        //     'date_upd' => date("Y-m-d H:i:s"),
+        //   ), 'id_orden = '.(int)$id_order);
+        //   $error = Db::getInstance()->getMsgError();
+
+        //   if ($result == true) {
+        //       self::logtxt("Registro actualizado en wsopenmarket con exito");
+        //   } else {
+        //       if ($error != '') {
+        //           self::logtxt($error);
+        //       }
+        //       self::logtxt("Hubo un error al intentar actualizar en wsopenmarket");
+        //   }
+
+        // }
+
+
+      // if($Consecutivo > 1) {
+      //   self::logtxt("$order");
+      // }
+
+
+
+      } //end foreach
+        
+
+    } catch (Exception $e) {
+        self::logtxt("Exeptions on sendManuallyOrders: " . $e->getMessage());
+    }
+
+  } // end sandbox
+
+
+ } // end sendManuallyOrders
+
+ // hook para validar la orden
+ public function hookActionValidateOrder($params)
+ {
+
+  self::logtxt("se ejecuto hookActionValidateOrder Successful!!");
+
+  if (!$this->WSOPENMARKET_SANDBOX_MODE == 1) {
+    try {
+      // $params = json_encode($params);
+      // self::logtxt("params: $params");
+
+      $id_order = $params['order']->id;
+      // self::logtxt("id_order: $id_order");
+      $id_shop = $params['order']->id_shop;
+      $id_lang = $params['order']->id_lang;
+      $fecha_pedido = $params['order']->date_add;
+      // self::logtxt("fecha_pedido: $fecha_pedido");
+      $id_customer = $params['order']->id_customer;
+      // self::logtxt("id_customer: $id_customer");
+      $valor_pedido = $params['order']->total_paid;
+      // self::logtxt("valor_pedido: $valor_pedido");
+      $reference = $params['order']->reference;
+      // self::logtxt("reference: $reference");
+      
+      $firstname = $params['customer']->firstname;
+      $lastname = $params['customer']->lastname;
+      $nombre_destinatario = $firstname.' '.$lastname;
+      // self::logtxt("nombre_destinatario: $nombre_destinatario");
+      
+      $product_list = $params['order']->product_list;
+      // we iterate items for save in table
+      foreach ($product_list as $key => $value) {
+        $id_product = $value['id_product'];
+        $quantityOrder = $value['quantity'];
+
+        $itemsPack = $this->getItemsPack($id_product);
+        // $itemsPack = json_encode($itemsPack);
+        // self::logtxt("itemsPack: $itemsPack");
+
+        if($itemsPack){
+
+          foreach ($itemsPack as $key => $item) {
+
+            $id_product = $item['id_product_item'];
+            $quantityPack = $item['quantity'];
+      
+            $packDetails = $this->getPackDetails($id_product, $id_lang, $id_shop);
+            // $packDetails = json_encode($packDetails);
+            // self::logtxt("packDetails: $packDetails");
+      
+            $producto = $packDetails[0]['name'];
+            $codigo_producto = $packDetails[0]['reference'];
+            $unidades = (int)$quantityOrder * (int)$quantityPack;
+      
+            // save data
+            $result = Db::getInstance()->insert('wsopenmarket', array(
+              'id_orden' => $id_order,
+              'referencia' => $reference,
+              'fecha_pedido' => $fecha_pedido,
+              'id_cliente' => $id_customer,
+              'nombre_destinatario' => $nombre_destinatario,
+              'valor_pedido' => $valor_pedido,
+              'id_producto' => $id_product,
+              'codigo_producto' => $codigo_producto,
+              'producto' => $producto,
+              'unidades' => $unidades,
+              'date_add' => date("Y-m-d H:i:s"),
+            ));
+            $error = Db::getInstance()->getMsgError();
+      
+            if ($result == true) {
+                self::logtxt("Registro guardado en wsopenmarket con exito");
+            } else {
+                if ($error != '') {
+                    self::logtxt($error);
+                }
+                self::logtxt("Hubo un error al intentar guardar en wsopenmarket");
+            }
+      
+          }//end foreach itemsPack
+
+        }else{
+
+          $producto = $value['name'];
+          $codigo_producto = $value['reference'];
+
+          // save data
+          $result = Db::getInstance()->insert('wsopenmarket', array(
+            'id_orden' => $id_order,
+            'referencia' => $reference,
+            'fecha_pedido' => $fecha_pedido,
+            'id_cliente' => $id_customer,
+            'nombre_destinatario' => $nombre_destinatario,
+            'valor_pedido' => $valor_pedido,
+            'id_producto' => $id_product,
+            'codigo_producto' => $codigo_producto,
+            'producto' => $producto,
+            'unidades' => $quantityOrder,
+            'date_add' => date("Y-m-d H:i:s"),
+          ));
+          $error = Db::getInstance()->getMsgError();
+
+          if ($result == true) {
+              self::logtxt("Registros guardados en wsopenmarket con exito");
+          } else {
+              if ($error != '') {
+                  self::logtxt($error);
+              }
+              self::logtxt("Hubo un error al intentar guardar en wsopenmarket");
+          }
+
+        } //end if exist packs
+
+
+      } //end iterate items for save in table
+
+    } catch (Exception $e) {
+      self::logtxt("Exeptions on hookActionValidateOrder: " . $e->getMessage());
     }
   } // end production
 
-
- }
+ } //end hookActionValidateOrder
 
 //  hook for page route
  public function hookModuleRoutes()
-    {
-        return [
-            'module-wsopenmarket-states' => [
-                'rule' => 'wsopenmarket/states',
-                'keywords' => [],
-                'controller' => 'states',
-                'params' => [
-                    'fc' => 'module',
-                    'module' => 'wsopenmarket'
-                ]
+{
+    return [
+        'module-wsopenmarket-states' => [
+            'rule' => 'wsopenmarket/states',
+            'keywords' => [],
+            'controller' => 'states',
+            'params' => [
+                'fc' => 'module',
+                'module' => 'wsopenmarket'
             ]
-        ];
-    }
+        ]
+    ];
+}
 
 //  funcion para obtener el codigo dane desde un archivo json
  public function DaneCode($ciudad) {
@@ -680,6 +1412,61 @@ class Wsopenmarket extends Module
       // self::logtxt($daneCode);
       return $daneCode;
 
+  }
+
+  /**
+     * Get items from pack
+     *
+     * @param int $id_product product id
+     * @return array items pack
+     */
+    public static function getItemsPack($id_product) {
+
+      $query = new DbQuery();
+      $query->select("*");
+      $query->from("pack");
+      $query->where("id_product_pack = " . $id_product);
+      $res = Db::getInstance()->executeS($query);
+
+      return $res;
+  }
+
+  /**
+     * Get pack details
+     *
+     * @param int $id_product product id
+     * @param int $id_lang language id
+     * @param int $id_shop shop id
+     * @return array pack details
+     */
+    public static function getPackDetails($id_product, $id_lang, $id_shop) {
+
+      $query = new DbQuery();
+      $query->select("A.reference");
+      $query->select("B.name");
+      $query->from("product", "A");
+      $query->innerJoin('product_lang', 'B', 'A.id_product = B.id_product AND B.id_lang = '.(int)$id_lang. ' AND B.id_shop = '.(int)$id_shop);
+      $query->where("A.id_product = ".$id_product);
+      $res = Db::getInstance()->executeS($query);
+
+      return $res;
+  }
+
+  /**
+     * Get items from ps_wsopenmarket table
+     *
+     * @param int $id_order order id
+     * @return array items details
+     */
+    public static function getOrderDetails($id_order) {
+
+      $query = new DbQuery();
+      $query->select("*");
+      $query->from("wsopenmarket");
+      $query->where("id_orden = " . $id_order);
+      $res = Db::getInstance()->executeS($query);
+
+      return $res;
   }
 
 }
