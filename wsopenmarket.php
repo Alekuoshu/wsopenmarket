@@ -588,7 +588,6 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
-        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
@@ -597,6 +596,7 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
         // Detalle
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
@@ -779,7 +779,6 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
-        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
@@ -788,6 +787,7 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
         // Detalle
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
@@ -986,7 +986,6 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
-        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
@@ -995,6 +994,7 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
         // Detalle
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
@@ -1192,7 +1192,6 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['TelefonoDestinatario'] = $TelefonoDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['CelularDestinatario'] = $CelularDestinatario;
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMinimaEntrega'] = $FechaPedido; //fecha del pedido
-        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinatario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['FechaMaximaEntrega'] = $FechaPedido; // fecha del pedido
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['Observaciones'] = $observaciones; // mensaje del checkout
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['ValorAsegurado'] = $ValorAsegurado;
@@ -1201,6 +1200,7 @@ class Wsopenmarket extends Module
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRecibido'] = ''; // dejar vacio
         $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['MensajeRespueta'] = ''; // dejar vacio
         // Detalle
+        $DESPACHOS['Sdtrecoutbounddelivery']['SDTRecOutboundDeliveryItem']['DepartamentoDestinario'] = $DepartamentoDestinatario; //departamento del destinatario
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Nit'] = '860002134-9';
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['Documento'] = $Documento;
         $DESPACHOS['Sdt_productos']['SDT_ProductosItem']['OrdenCompra'] = $OrdenCompra;
