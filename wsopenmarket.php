@@ -520,39 +520,54 @@ class Wsopenmarket extends Module
           $CelularDestinatario = $address->phone_mobile;
           $CodigoDestinatario = $address->dni;
           $CiudadDes = $address->city;
-          $other = $address->other;
+          // $other = $address->other;
           $id_state = $address->id_state;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
       $ValorAsegurado = round($order->total_paid, 2);
 
+
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
       // obtenemos el codigo dane segun la ciudad del destinatario
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // evalua si es nariño para el codigo dane
+      if($Ciudad == 'NARINO'){
+        if($DepartamentoDestinatario == 'Antioquia'){
+          $CiudadDestinatario = '05483';
+        }
+        if($DepartamentoDestinatario == 'Cordoba'){
+          $CiudadDestinatario = '25483';
+        }
+        if($DepartamentoDestinatario == 'Meta'){
+          $CiudadDestinatario = '52480';
+        }
+      }else{
+        $CiudadDestinatario = $this->DaneCode($Ciudad);
+      }
 
       // detalle
       $OrdenCompra = $id_order;
 
       // Mensaje del chekout
-      // $messageCore = new MessageCore();
-      // $message = $messageCore->getMessagesByOrderId($id_order);
-      // $observaciones = '';
-      // if(isset($message)){
-      //   $observaciones = substr($message[0]['message'], 0, 200);
-      // }
-
-      // dejar en porteria
+      $messageCore = new MessageCore();
+      $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if($other == '1'){
-        $observaciones = "Dejar el pedido en porteria!";
+      if(isset($message)){
+        $observaciones = substr($message[0]['message'], 0, 200);
       }
 
-      // obtenemos el Estado o Departamento
-      $states = new StateCore();
-      $DepartamentoDestinatario = $states->getNameById($id_state);
+      // dejar en porteria
+      // $observaciones = '';
+      // if($other == '1'){
+      //   $observaciones = "Dejar el pedido en porteria!";
+      // }
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
@@ -711,39 +726,53 @@ class Wsopenmarket extends Module
           $CelularDestinatario = $address->phone_mobile;
           $CodigoDestinatario = $address->dni;
           $CiudadDes = $address->city;
-          $other = $address->other;
+          // $other = $address->other;
           $id_state = $address->id_state;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
       $ValorAsegurado = round($order->total_paid, 2);
 
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
       // obtenemos el codigo dane segun la ciudad del destinatario
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // evalua si es nariño para el codigo dane
+      if($Ciudad == 'NARINO'){
+        if($DepartamentoDestinatario == 'Antioquia'){
+          $CiudadDestinatario = '05483';
+        }
+        if($DepartamentoDestinatario == 'Cordoba'){
+          $CiudadDestinatario = '25483';
+        }
+        if($DepartamentoDestinatario == 'Meta'){
+          $CiudadDestinatario = '52480';
+        }
+      }else{
+        $CiudadDestinatario = $this->DaneCode($Ciudad);
+      }
 
       // detalle
       $OrdenCompra = $id_order;
 
       // Mensaje del chekout
-      // $messageCore = new MessageCore();
-      // $message = $messageCore->getMessagesByOrderId($id_order);
-      // $observaciones = '';
-      // if(isset($message)){
-      //   $observaciones = substr($message[0]['message'], 0, 200);
-      // }
-
-      // dejar en porteria
+      $messageCore = new MessageCore();
+      $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if($other == '1'){
-        $observaciones = "Dejar el pedido en porteria!";
+      if(isset($message)){
+        $observaciones = substr($message[0]['message'], 0, 200);
       }
 
-      // obtenemos el Estado o Departamento
-      $states = new StateCore();
-      $DepartamentoDestinatario = $states->getNameById($id_state);
+      // dejar en porteria
+      // $observaciones = '';
+      // if($other == '1'){
+      //   $observaciones = "Dejar el pedido en porteria!";
+      // }
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
@@ -909,40 +938,53 @@ class Wsopenmarket extends Module
           $CelularDestinatario = $address->phone_mobile;
           $CodigoDestinatario = $address->dni;
           $CiudadDes = $address->city;
-          $other = $address->other;
+          // $other = $address->other;
           $id_state = $address->id_state;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
       $ValorAsegurado = round($order->total_paid, 2);
 
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
       // obtenemos el codigo dane segun la ciudad del destinatario
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-      self::logtxt("Ciudad: $Ciudad");
-      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // evalua si es nariño para el codigo dane
+      if($Ciudad == 'NARINO'){
+        if($DepartamentoDestinatario == 'Antioquia'){
+          $CiudadDestinatario = '05483';
+        }
+        if($DepartamentoDestinatario == 'Cordoba'){
+          $CiudadDestinatario = '25483';
+        }
+        if($DepartamentoDestinatario == 'Meta'){
+          $CiudadDestinatario = '52480';
+        }
+      }else{
+        $CiudadDestinatario = $this->DaneCode($Ciudad);
+      }
 
       // detalle
       $OrdenCompra = $id_order;
 
       // Mensaje del chekout
-      // $messageCore = new MessageCore();
-      // $message = $messageCore->getMessagesByOrderId($id_order);
-      // $observaciones = '';
-      // if(isset($message)){
-      //   $observaciones = substr($message[0]['message'], 0, 200);
-      // }
-
-      // dejar en porteria
+      $messageCore = new MessageCore();
+      $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if($other == '1'){
-        $observaciones = "Dejar el pedido en porteria!";
+      if(isset($message)){
+        $observaciones = substr($message[0]['message'], 0, 200);
       }
 
-      // obtenemos el Estado o Departamento
-      $states = new StateCore();
-      $DepartamentoDestinatario = $states->getNameById($id_state);
+      // dejar en porteria
+      // $observaciones = '';
+      // if($other == '1'){
+      //   $observaciones = "Dejar el pedido en porteria!";
+      // }
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
@@ -1115,40 +1157,53 @@ class Wsopenmarket extends Module
           $CelularDestinatario = $address->phone_mobile;
           $CodigoDestinatario = $address->dni;
           $CiudadDes = $address->city;
-          $other = $address->other;
+          // $other = $address->other;
           $id_state = $address->id_state;
       } else {
           self::logtxt("Dirección erronea, el objeto no es válido");
       }
       $ValorAsegurado = round($order->total_paid, 2);
 
+      // obtenemos el Estado o Departamento
+      $states = new StateCore();
+      $DepartamentoDestinatario = $states->getNameById($id_state);
+
       // obtenemos el codigo dane segun la ciudad del destinatario
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-      self::logtxt("Ciudad: $Ciudad");
-      $CiudadDestinatario = $this->DaneCode($Ciudad);
+
+      // evalua si es nariño para el codigo dane
+      if($Ciudad == 'NARINO'){
+        if($DepartamentoDestinatario == 'Antioquia'){
+          $CiudadDestinatario = '05483';
+        }
+        if($DepartamentoDestinatario == 'Cordoba'){
+          $CiudadDestinatario = '25483';
+        }
+        if($DepartamentoDestinatario == 'Meta'){
+          $CiudadDestinatario = '52480';
+        }
+      }else{
+        $CiudadDestinatario = $this->DaneCode($Ciudad);
+      }
 
       // detalle
       $OrdenCompra = $id_order;
 
       // Mensaje del chekout
-      // $messageCore = new MessageCore();
-      // $message = $messageCore->getMessagesByOrderId($id_order);
-      // $observaciones = '';
-      // if(isset($message)){
-      //   $observaciones = substr($message[0]['message'], 0, 200);
-      // }
-
-      // dejar en porteria
+      $messageCore = new MessageCore();
+      $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if($other == '1'){
-        $observaciones = "Dejar el pedido en porteria!";
+      if(isset($message)){
+        $observaciones = substr($message[0]['message'], 0, 200);
       }
 
-      // obtenemos el Estado o Departamento
-      $states = new StateCore();
-      $DepartamentoDestinatario = $states->getNameById($id_state);
+      // dejar en porteria
+      // $observaciones = '';
+      // if($other == '1'){
+      //   $observaciones = "Dejar el pedido en porteria!";
+      // }
 
       // Armando el xml de envio:
       require_once 'ws/orden_client.php';
