@@ -536,21 +536,7 @@ class Wsopenmarket extends Module
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-
-      // evalua si es nariño para el codigo dane
-      if($Ciudad == 'NARINO'){
-        if($DepartamentoDestinatario == 'Antioquia'){
-          $CiudadDestinatario = '05483';
-        }
-        if($DepartamentoDestinatario == 'Cordoba'){
-          $CiudadDestinatario = '25483';
-        }
-        if($DepartamentoDestinatario == 'Meta'){
-          $CiudadDestinatario = '52480';
-        }
-      }else{
-        $CiudadDestinatario = $this->DaneCode($Ciudad);
-      }
+      $CiudadDestinatario = $this->DaneCode($Ciudad, $DepartamentoDestinatario);
 
       // detalle
       $OrdenCompra = $id_order;
@@ -559,7 +545,7 @@ class Wsopenmarket extends Module
       $messageCore = new MessageCore();
       $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if(isset($message)){
+      if(!empty($message)){
         $observaciones = substr($message[0]['message'], 0, 200);
       }
 
@@ -741,21 +727,7 @@ class Wsopenmarket extends Module
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-
-      // evalua si es nariño para el codigo dane
-      if($Ciudad == 'NARINO'){
-        if($DepartamentoDestinatario == 'Antioquia'){
-          $CiudadDestinatario = '05483';
-        }
-        if($DepartamentoDestinatario == 'Cordoba'){
-          $CiudadDestinatario = '25483';
-        }
-        if($DepartamentoDestinatario == 'Meta'){
-          $CiudadDestinatario = '52480';
-        }
-      }else{
-        $CiudadDestinatario = $this->DaneCode($Ciudad);
-      }
+      $CiudadDestinatario = $this->DaneCode($Ciudad, $DepartamentoDestinatario);
 
       // detalle
       $OrdenCompra = $id_order;
@@ -763,8 +735,9 @@ class Wsopenmarket extends Module
       // Mensaje del chekout
       $messageCore = new MessageCore();
       $message = $messageCore->getMessagesByOrderId($id_order);
+      $mes = json_encode($message);
       $observaciones = '';
-      if(isset($message)){
+      if(!empty($message)){
         $observaciones = substr($message[0]['message'], 0, 200);
       }
 
@@ -953,21 +926,7 @@ class Wsopenmarket extends Module
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-
-      // evalua si es nariño para el codigo dane
-      if($Ciudad == 'NARINO'){
-        if($DepartamentoDestinatario == 'Antioquia'){
-          $CiudadDestinatario = '05483';
-        }
-        if($DepartamentoDestinatario == 'Cordoba'){
-          $CiudadDestinatario = '25483';
-        }
-        if($DepartamentoDestinatario == 'Meta'){
-          $CiudadDestinatario = '52480';
-        }
-      }else{
-        $CiudadDestinatario = $this->DaneCode($Ciudad);
-      }
+      $CiudadDestinatario = $this->DaneCode($Ciudad, $DepartamentoDestinatario);
 
       // detalle
       $OrdenCompra = $id_order;
@@ -976,7 +935,7 @@ class Wsopenmarket extends Module
       $messageCore = new MessageCore();
       $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if(isset($message)){
+      if(!empty($message)){
         $observaciones = substr($message[0]['message'], 0, 200);
       }
 
@@ -1172,21 +1131,7 @@ class Wsopenmarket extends Module
       setlocale(LC_ALL, 'en_US.UTF8');
       $CiudadDes= preg_replace("/[^A-Za-z0-9 ]/", '', iconv('UTF-8', 'ASCII//TRANSLIT', $CiudadDes));
       $Ciudad = mb_strtoupper($CiudadDes);
-
-      // evalua si es nariño para el codigo dane
-      if($Ciudad == 'NARINO'){
-        if($DepartamentoDestinatario == 'Antioquia'){
-          $CiudadDestinatario = '05483';
-        }
-        if($DepartamentoDestinatario == 'Cordoba'){
-          $CiudadDestinatario = '25483';
-        }
-        if($DepartamentoDestinatario == 'Meta'){
-          $CiudadDestinatario = '52480';
-        }
-      }else{
-        $CiudadDestinatario = $this->DaneCode($Ciudad);
-      }
+      $CiudadDestinatario = $this->DaneCode($Ciudad, $DepartamentoDestinatario);
 
       // detalle
       $OrdenCompra = $id_order;
@@ -1195,7 +1140,7 @@ class Wsopenmarket extends Module
       $messageCore = new MessageCore();
       $message = $messageCore->getMessagesByOrderId($id_order);
       $observaciones = '';
-      if(isset($message)){
+      if(!empty($message)){
         $observaciones = substr($message[0]['message'], 0, 200);
       }
 
@@ -1454,13 +1399,14 @@ class Wsopenmarket extends Module
 }
 
 //  funcion para obtener el codigo dane desde un archivo json
- public function DaneCode($ciudad) {
+ public function DaneCode($ciudad, $departamento) {
    $CodeDanedata = file_get_contents(_PS_BASE_URL_.'/modules/wsopenmarket/lib/codigosdane.json');
       $codigosDane = json_decode($CodeDanedata, true);
 
       foreach ($codigosDane as $codigoDane) {
         $Ciudad = $codigoDane['ciudad'];
-        if($Ciudad == $ciudad) {
+        $Departamento = $codigoDane['departamento'];
+        if($Ciudad == $ciudad && $Departamento == $departamento) {
           $daneCode = $codigoDane['codigo'];
         }
       }

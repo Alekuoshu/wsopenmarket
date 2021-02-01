@@ -173,18 +173,34 @@ class Service
             // Validar campos
             if ($inPicking['NroPedido'] == null) {
                 $pconfirmation = '204 - El numero del pedido no es válido o está vacio';
+                $state = false;
             } elseif ($current_stateid < 1) {
                 $pconfirmation = '204 - El pedido con numero: '.$inPicking['NroPedido'].' no existe';
+                $state = false;
             } elseif ($fecha == null) {
                 $pconfirmation = '204 - La fecha es nula';
+                $state = false;
             } elseif ($fechaCorrect == false) {
                 $pconfirmation = '204 - El formato de la fecha no es válido, ej: DD-MM-YYYY';
+                $state = false;
             } elseif ($inPicking['Hora'] == null) {
                 $pconfirmation = '204 - La hora es nula';
+                $state = false;
             } elseif ($horaCorrect == false) {
                 $pconfirmation = '204 - El formato de la hora no es válido, ej: HH:MM:SS';
+                $state = false;
             }
 
+            $query = new DbQuery();
+            $query->select("id_order_state");
+            $query->from("order_history");
+            $query->where("id_order = " . (int) $inPicking['NroPedido']);
+            $resStatesHistories = Db::getInstance()->executeS($query);
+            $idHistories = array();
+
+            foreach ($resStatesHistories as $key => $value) {
+                $idHistories[] = (int) $value['id_order_state'];
+            }
 
             // Actualizando estado
             if ($current_stateid >= 1 && $state == true) {
@@ -193,8 +209,26 @@ class Service
                     throw new PrestaShopException('No se ha podido cargar el estado de la orden');
                     $module::logtxt(json_encode('No se ha podido cargar el estado de la orden'));
                 }
-
-                if ((int) $order->getCurrentState() != (int)$new_order_state) {
+                $noCambiar = array(5,6,7,8);
+                switch ($order->getCurrentState()) {
+                    case '5':
+                        $estado = 'Entregado';
+                    break;
+                    case '6':
+                        $estado = 'Cancelado';
+                    break;
+                    case '7':
+                        $estado = 'Reembolso';
+                    break;
+                    case '8':
+                        $estado = 'Error en pago';
+                    break;
+                    default:
+                        $estado = 'Entregado';
+                    break;
+                }
+                
+                if (!in_array((int)$new_order_state, $idHistories) && !in_array((int)$order->getCurrentState(), $noCambiar)) {
                     try {
                         $order->setCurrentState($new_order_state, 9);
                         $module::logtxt('Estado de la orden '.$inPicking['NroPedido'].' actualizada a: ' . $new_order_state);
@@ -203,7 +237,10 @@ class Service
                         $pconfirmation = '500 - Error al cambiar el estado de la orden';
                     }
                 }else {
-                    $module::logtxt('La orden ' . $inPicking['NroPedido'].' ya tiene el estado numero: '.$new_order_state);
+                    $ress = json_encode($idHistories);
+                    $module::logtxt('##Histories:: '.$ress);
+                    $module::logtxt('La orden ' . $inPicking['NroPedido'].' ya tiene el estado numero: '.$new_order_state.' o esta en '.$estado);
+                    $pconfirmation = '501 - La orden ' . $inPicking['NroPedido'].' ya tiene el estado numero: '.$new_order_state.' o esta en '.$estado;
                 }
 
             }
